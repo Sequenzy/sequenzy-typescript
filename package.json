@@ -2,7 +2,7 @@
   "name": "sequenzy",
   "version": "0.1.0",
   "description": "The official TypeScript library for the Sequenzy API",
-  "author": "Sequenzy <>",
+  "author": "Sequenzy <nic@sequenzy.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",

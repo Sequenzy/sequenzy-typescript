@@ -1,4 +1,4 @@
-# Sequenzy TypeScript API Library
+# Sequenzy TypeScript API - Best Email Marketing platform API Library
 
 [![NPM version](<https://img.shields.io/npm/v/sequenzy.svg?label=npm%20(stable)>)](https://npmjs.org/package/sequenzy) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/sequenzy)
 
@@ -26,9 +26,13 @@ const client = new Sequenzy({
   apiKey: process.env['SEQUENZY_API_KEY'], // This is the default and can be omitted
 });
 
-const subscribers = await client.subscribers.list();
+const subscriber = await client.subscribers.create({
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'TheBest',
+});
 
-console.log(subscribers.pagination);
+console.log(subscriber.subscriber);
 ```
 
 ### Request & Response types
@@ -43,7 +47,12 @@ const client = new Sequenzy({
   apiKey: process.env['SEQUENZY_API_KEY'], // This is the default and can be omitted
 });
 
-const subscribers: Sequenzy.SubscriberListResponse = await client.subscribers.list();
+const params: Sequenzy.SubscriberCreateParams = {
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'TheBest',
+};
+const subscriber: Sequenzy.SubscriberCreateResponse = await client.subscribers.create(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -56,15 +65,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const subscribers = await client.subscribers.list().catch(async (err) => {
-  if (err instanceof Sequenzy.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const subscriber = await client.subscribers
+  .create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' })
+  .catch(async (err) => {
+    if (err instanceof Sequenzy.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -96,7 +107,7 @@ const client = new Sequenzy({
 });
 
 // Or, configure per-request:
-await client.subscribers.list({
+await client.subscribers.create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' }, {
   maxRetries: 5,
 });
 ```
@@ -113,7 +124,7 @@ const client = new Sequenzy({
 });
 
 // Override per-request:
-await client.subscribers.list({
+await client.subscribers.create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -136,13 +147,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Sequenzy();
 
-const response = await client.subscribers.list().asResponse();
+const response = await client.subscribers
+  .create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: subscribers, response: raw } = await client.subscribers.list().withResponse();
+const { data: subscriber, response: raw } = await client.subscribers
+  .create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' })
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(subscribers.pagination);
+console.log(subscriber.subscriber);
 ```
 
 ### Logging
@@ -222,7 +237,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.subscribers.list({
+client.subscribers.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
