@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 (2025-12-08)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([21e684c](https://github.com/Sequenzy/sequenzy-typescript/commit/21e684cb059e3387f595aba165e17ea66cae53b4))
+
 ## 0.1.0 (2025-12-08)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.0.1...v0.1.0)
