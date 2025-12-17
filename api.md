@@ -55,3 +55,15 @@ Methods:
 - <code title="get /transactional/{slug}">client.transactional.<a href="./src/resources/transactional.ts">retrieve</a>(slug) -> TransactionalRetrieveResponse</code>
 - <code title="get /transactional">client.transactional.<a href="./src/resources/transactional.ts">list</a>() -> TransactionalListResponse</code>
 - <code title="post /transactional/send">client.transactional.<a href="./src/resources/transactional.ts">send</a>({ ...params }) -> TransactionalSendResponse</code>
+
+# Widgets
+
+## Preferences
+
+Types:
+
+- <code><a href="./src/resources/widgets/preferences.ts">PreferenceGenerateTokenResponse</a></code>
+
+Methods:
+
+- <code title="post /widgets/preferences/token">client.widgets.preferences.<a href="./src/resources/widgets/preferences.ts">generateToken</a>({ ...params }) -> PreferenceGenerateTokenResponse</code>

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2025-12-17)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** add widgets ([8b8cd72](https://github.com/Sequenzy/sequenzy-typescript/commit/8b8cd72fdf6f6294729b1568324cf7174e2b31a8))
+
 ## 0.2.0 (2025-12-08)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.1.0...v0.2.0)
