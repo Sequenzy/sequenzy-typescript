@@ -36,6 +36,7 @@ import {
   SubscriberUpdateResponse,
   Subscribers,
 } from './resources/subscribers/subscribers';
+import { Widgets } from './resources/widgets/widgets';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -735,10 +736,12 @@ export class Sequenzy {
 
   subscribers: API.Subscribers = new API.Subscribers(this);
   transactional: API.Transactional = new API.Transactional(this);
+  widgets: API.Widgets = new API.Widgets(this);
 }
 
 Sequenzy.Subscribers = Subscribers;
 Sequenzy.Transactional = Transactional;
+Sequenzy.Widgets = Widgets;
 
 export declare namespace Sequenzy {
   export type RequestOptions = Opts.RequestOptions;
@@ -764,4 +767,6 @@ export declare namespace Sequenzy {
     type TransactionalSendResponse as TransactionalSendResponse,
     type TransactionalSendParams as TransactionalSendParams,
   };
+
+  export { Widgets as Widgets };
 }

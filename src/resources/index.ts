@@ -20,3 +20,4 @@ export {
   type TransactionalSendResponse,
   type TransactionalSendParams,
 } from './transactional';
+export { Widgets } from './widgets/widgets';
