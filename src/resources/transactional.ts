@@ -40,6 +40,7 @@ export class Transactional extends APIResource {
    * - Provide a `slug` to use a saved template
    * - Provide `subject` and `body` to send custom content directly
    *
+   * Optionally set `from` (domain must be verified) and `replyTo` addresses.
    * Variables can be passed to customize the email content. Returns immediately with
    * a job ID.
    *
@@ -135,9 +136,21 @@ export interface TransactionalSendParams {
   body?: string;
 
   /**
+   * Custom from address. Format: "Name <email>" or just "email". The domain must be
+   * verified for your account. If not verified, this field is silently ignored.
+   */
+  from?: string;
+
+  /**
    * Preview text for the email (only used with direct content)
    */
   preview?: string;
+
+  /**
+   * Reply-to address. Format: "Name <email>" or just "email". Can be any valid email
+   * address.
+   */
+  replyTo?: string;
 
   /**
    * Slug of the transactional email template to use (mutually exclusive with
