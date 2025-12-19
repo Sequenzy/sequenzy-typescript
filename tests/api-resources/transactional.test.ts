@@ -49,7 +49,9 @@ describe('resource transactional', () => {
     const response = await client.transactional.send({
       to: 'recipient@example.com',
       body: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
+      from: 'Notifications <notifications@example.com>',
       preview: 'Welcome to our platform',
+      replyTo: 'Support <support@example.com>',
       slug: 'welcome-email',
       subject: 'Welcome to our platform!',
       variables: { NAME: 'bar' },
