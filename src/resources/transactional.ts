@@ -40,6 +40,19 @@ export class Transactional extends APIResource {
    * - Provide a `slug` to use a saved template
    * - Provide `subject` and `body` to send custom content directly
    *
+   * **Recipients:**
+   *
+   * - `to` can be a single email or an array of up to 50 emails
+   * - `cc` (carbon copy) recipients are visible to all recipients
+   * - `bcc` (blind carbon copy) recipients are hidden from other recipients
+   * - Duplicate emails across fields are automatically deduplicated
+   *
+   * **Attachments:**
+   *
+   * - Attachments can be provided as Base64-encoded content or URLs
+   * - Maximum total attachment size: 40MB per email
+   * - Any file type supported (PDFs, images, documents, etc.)
+   *
    * Optionally set `from` (domain must be verified) and `replyTo` addresses.
    * Variables can be passed to customize the email content. Returns immediately with
    * a job ID.
@@ -96,11 +109,15 @@ export type TransactionalSendResponse =
 
 export namespace TransactionalSendResponse {
   export interface SlugBasedResponse {
+    bcc?: Array<string>;
+
+    cc?: Array<string>;
+
     jobId?: string;
 
     success?: boolean;
 
-    to?: string;
+    to?: string | Array<string>;
 
     transactional?: SlugBasedResponse.Transactional;
   }
@@ -116,24 +133,49 @@ export namespace TransactionalSendResponse {
   }
 
   export interface DirectContentResponse {
+    bcc?: Array<string>;
+
+    cc?: Array<string>;
+
     jobId?: string;
 
     success?: boolean;
 
-    to?: string;
+    to?: string | Array<string>;
   }
 }
 
 export interface TransactionalSendParams {
   /**
-   * Recipient email address
+   * Recipient email address(es). Can be a single email string or an array of up to
+   * 50 emails.
    */
-  to: string;
+  to: string | Array<string>;
+
+  /**
+   * File attachments for the email. Each attachment must have a filename and either:
+   *
+   * - `content`: Base64-encoded file content
+   * - `path`: URL to fetch the file from
+   *
+   * Maximum total size: 40MB per email.
+   */
+  attachments?: Array<TransactionalSendParams.Attachment>;
+
+  /**
+   * Blind carbon copy recipients. These addresses are hidden from other recipients.
+   */
+  bcc?: Array<string>;
 
   /**
    * Email body HTML content (required if not using slug)
    */
   body?: string;
+
+  /**
+   * Carbon copy recipients. These addresses are visible to all recipients.
+   */
+  cc?: Array<string>;
 
   /**
    * Custom from address. Format: "Name <email>" or just "email". The domain must be
@@ -167,6 +209,30 @@ export interface TransactionalSendParams {
    * Variables for template replacement (works with both modes)
    */
   variables?: { [key: string]: unknown };
+}
+
+export namespace TransactionalSendParams {
+  export interface Attachment {
+    /**
+     * The filename for the attachment (including extension)
+     */
+    filename: string;
+
+    /**
+     * Base64-encoded file content (mutually exclusive with path)
+     */
+    content?: string;
+
+    /**
+     * MIME type of the attachment (optional, auto-detected if not provided)
+     */
+    contentType?: string;
+
+    /**
+     * URL to fetch the file from (mutually exclusive with content)
+     */
+    path?: string;
+  }
 }
 
 export declare namespace Transactional {
