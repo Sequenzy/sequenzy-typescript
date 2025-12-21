@@ -48,7 +48,17 @@ describe('resource transactional', () => {
   test.skip('send: required and optional params', async () => {
     const response = await client.transactional.send({
       to: 'recipient@example.com',
+      attachments: [
+        {
+          filename: 'invoice.pdf',
+          content: 'JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC...',
+          contentType: 'application/pdf',
+          path: 'https://example.com/invoices/123.pdf',
+        },
+      ],
+      bcc: ['audit@example.com'],
       body: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
+      cc: ['manager@example.com'],
       from: 'Notifications <notifications@example.com>',
       preview: 'Welcome to our platform',
       replyTo: 'Support <support@example.com>',
