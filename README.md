@@ -1,10 +1,10 @@
-# Sequenzy TypeScript API - Best Email Marketing platform API Library
+# Sequenzy TypeScript API - Best Email Marketing Platform API Library
 
 [![NPM version](<https://img.shields.io/npm/v/sequenzy.svg?label=npm%20(stable)>)](https://npmjs.org/package/sequenzy) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/sequenzy)
 
 This library provides convenient access to the Sequenzy REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.sequenzy.com](https://docs.sequenzy.com). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
