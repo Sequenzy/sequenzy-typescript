@@ -27,6 +27,7 @@ describe('resource subscribers', () => {
       customAttributes: { plan: 'bar' },
       firstName: 'John',
       lastName: 'Doe',
+      lists: ['list-id-1', 'list-id-2'],
       status: 'active',
       tags: ['newsletter'],
     });
