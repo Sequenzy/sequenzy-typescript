@@ -165,6 +165,12 @@ export interface SubscriberCreateParams {
 
   lastName?: string;
 
+  /**
+   * List IDs to add subscriber to. If not provided, subscriber is added to ALL
+   * company lists. If empty array, subscriber is added to NO lists.
+   */
+  lists?: Array<string>;
+
   status?: 'active' | 'unsubscribed';
 
   tags?: Array<string>;
