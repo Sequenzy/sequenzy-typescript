@@ -20,7 +20,8 @@ export class Subscribers extends APIResource {
   events: EventsAPI.Events = new EventsAPI.Events(this._client);
 
   /**
-   * Creates a new subscriber. Returns 409 if subscriber already exists.
+   * Creates a new subscriber or returns the existing one. If the subscriber already
+   * exists, their custom attributes are merged with any new ones provided.
    *
    * @example
    * ```ts
