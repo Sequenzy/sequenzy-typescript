@@ -25,6 +25,7 @@ describe('resource subscribers', () => {
     const response = await client.subscribers.create({
       email: 'user@example.com',
       customAttributes: { plan: 'bar' },
+      enrollInSequences: true,
       firstName: 'John',
       lastName: 'Doe',
       lists: ['list-id-1', 'list-id-2'],

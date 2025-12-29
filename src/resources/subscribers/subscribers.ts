@@ -162,6 +162,11 @@ export interface SubscriberCreateParams {
 
   customAttributes?: { [key: string]: unknown };
 
+  /**
+   * Whether to enroll the subscriber in matching sequences. Defaults to false.
+   */
+  enrollInSequences?: boolean;
+
   firstName?: string;
 
   lastName?: string;
