@@ -75,7 +75,12 @@ describe('resource subscribers', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.subscribers.list(
-        { email: 'email', limit: 100, page: 0, status: 'active' },
+        {
+          email: 'email',
+          limit: 100,
+          page: 0,
+          status: 'active',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Sequenzy.NotFoundError);
