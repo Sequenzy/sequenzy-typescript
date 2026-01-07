@@ -66,7 +66,11 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const subscriber = await client.subscribers
-  .create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' })
+  .create({
+    email: 'user@example.com',
+    firstName: 'User',
+    lastName: 'TheBest',
+  })
   .catch(async (err) => {
     if (err instanceof Sequenzy.APIError) {
       console.log(err.status); // 400
@@ -107,7 +111,11 @@ const client = new Sequenzy({
 });
 
 // Or, configure per-request:
-await client.subscribers.create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' }, {
+await client.subscribers.create({
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'TheBest',
+}, {
   maxRetries: 5,
 });
 ```
@@ -124,7 +132,11 @@ const client = new Sequenzy({
 });
 
 // Override per-request:
-await client.subscribers.create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' }, {
+await client.subscribers.create({
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'TheBest',
+}, {
   timeout: 5 * 1000,
 });
 ```
@@ -148,13 +160,21 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 const client = new Sequenzy();
 
 const response = await client.subscribers
-  .create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' })
+  .create({
+    email: 'user@example.com',
+    firstName: 'User',
+    lastName: 'TheBest',
+  })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: subscriber, response: raw } = await client.subscribers
-  .create({ email: 'user@example.com', firstName: 'User', lastName: 'TheBest' })
+  .create({
+    email: 'user@example.com',
+    firstName: 'User',
+    lastName: 'TheBest',
+  })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(subscriber.subscriber);

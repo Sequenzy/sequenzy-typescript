@@ -29,7 +29,11 @@ describe('resource events', () => {
       email: 'user@example.com',
       event: 'purchase.completed',
       customAttributes: { foo: 'bar' },
-      properties: { amount: 'bar', currency: 'bar', productId: 'bar' },
+      properties: {
+        amount: 'bar',
+        currency: 'bar',
+        productId: 'bar',
+      },
     });
   });
 
@@ -52,7 +56,12 @@ describe('resource events', () => {
   test.skip('triggerMultiple: required and optional params', async () => {
     const response = await client.subscribers.events.triggerMultiple({
       email: 'user@example.com',
-      events: [{ name: 'page.viewed', properties: { page: 'bar' } }],
+      events: [
+        {
+          name: 'page.viewed',
+          properties: { page: 'bar' },
+        },
+      ],
       customAttributes: { foo: 'bar' },
     });
   });
