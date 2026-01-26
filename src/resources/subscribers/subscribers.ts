@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as SubscribersAPI from './subscribers';
 import * as EventsAPI from './events';
 import {
   EventTriggerMultipleParams,
@@ -20,8 +21,14 @@ export class Subscribers extends APIResource {
   events: EventsAPI.Events = new EventsAPI.Events(this._client);
 
   /**
-   * Creates a new subscriber or returns the existing one. If the subscriber already
-   * exists, their custom attributes are merged with any new ones provided.
+   * Creates a new subscriber or handles existing ones based on the
+   * `duplicateStrategy` parameter.
+   *
+   * **Duplicate Strategies:**
+   *
+   * - `skip` (default): Don't update existing subscribers
+   * - `merge`: Only fill in missing fields, never overwrite existing values
+   * - `overwrite`: Replace all fields (but never reactivate unsubscribed users)
    *
    * @example
    * ```ts
@@ -114,9 +121,28 @@ export interface Subscriber {
 }
 
 export interface SubscriberCreateResponse {
-  subscriber?: Subscriber;
+  subscriber?: SubscriberCreateResponse.Subscriber;
 
   success?: boolean;
+}
+
+export namespace SubscriberCreateResponse {
+  export interface Subscriber extends SubscribersAPI.Subscriber {
+    /**
+     * Whether the subscriber was newly created
+     */
+    created?: boolean;
+
+    /**
+     * Whether the subscriber was skipped (skip strategy on existing)
+     */
+    skipped?: boolean;
+
+    /**
+     * Whether the subscriber was updated (merge/overwrite strategies)
+     */
+    updated?: boolean;
+  }
 }
 
 export interface SubscriberRetrieveResponse {
@@ -163,7 +189,17 @@ export interface SubscriberCreateParams {
   customAttributes?: { [key: string]: unknown };
 
   /**
-   * Whether to enroll the subscriber in matching sequences. Defaults to false.
+   * How to handle existing subscribers:
+   *
+   * - `skip`: Don't update existing subscribers (default)
+   * - `merge`: Only fill in missing fields, never overwrite existing values
+   * - `overwrite`: Replace all fields (but never reactivate unsubscribed users)
+   */
+  duplicateStrategy?: 'skip' | 'merge' | 'overwrite';
+
+  /**
+   * Whether to enroll the subscriber in matching sequences. Defaults to true for API
+   * calls.
    */
   enrollInSequences?: boolean;
 
