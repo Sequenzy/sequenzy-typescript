@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.10.0 (2026-01-26)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **api:** api update ([43dac7f](https://github.com/Sequenzy/sequenzy-typescript/commit/43dac7fe2b33ad6922969f34605ddb6557f2feef))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([a8c061f](https://github.com/Sequenzy/sequenzy-typescript/commit/a8c061f03a40b54db518ba29f84722be81523ac1))
+* **ci:** upgrade `actions/github-script` ([1d55c09](https://github.com/Sequenzy/sequenzy-typescript/commit/1d55c0985d175e467d4a6eef7ccff3065086f42f))
+* **internal:** codegen related update ([b62eeaa](https://github.com/Sequenzy/sequenzy-typescript/commit/b62eeaa6258ec1fa3a8a31cf57acf831145fb171))
+* **internal:** update `actions/checkout` version ([6a6f6ea](https://github.com/Sequenzy/sequenzy-typescript/commit/6a6f6ea768cbcfdf00cd205c0d7231f84ba04258))
+* **internal:** update lock file ([628c35a](https://github.com/Sequenzy/sequenzy-typescript/commit/628c35ab06c3b9c843ffde89072474a214ddfd07))
+* **internal:** upgrade babel, qs, js-yaml ([95bce77](https://github.com/Sequenzy/sequenzy-typescript/commit/95bce77bc16d05794d9e2f66d234e43ae1bcc4f2))
+* **internal:** upgrade brace-expansion and @babel/helpers ([fc6c5e5](https://github.com/Sequenzy/sequenzy-typescript/commit/fc6c5e5e31547029f98a57701aee8a6a0e4a823f))
+
 ## 0.9.0 (2025-12-29)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.8.0...v0.9.0)
