@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.1 (2026-02-03)
+
+Full Changelog: [v0.10.0...v0.10.1](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.0...v0.10.1)
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([852ade2](https://github.com/Sequenzy/sequenzy-typescript/commit/852ade21283afd590cbf0243303fd79df2e0563d))
+
 ## 0.10.0 (2026-01-26)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.9.0...v0.10.0)
