@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.10.2 (2026-02-06)
+
+Full Changelog: [v0.10.1...v0.10.2](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.1...v0.10.2)
+
+### Bug Fixes
+
+* **client:** avoid removing abort listener too early ([73ac0fa](https://github.com/Sequenzy/sequenzy-typescript/commit/73ac0facf2fb7796cfb1621b26e58a5fd2bf1d0f))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([fc53fd1](https://github.com/Sequenzy/sequenzy-typescript/commit/fc53fd106c584f93584ada97288dfd038f692912))
+* **client:** restructure abort controller binding ([9336302](https://github.com/Sequenzy/sequenzy-typescript/commit/9336302fb4323b708ffbb4d583ad67b00c9ba34b))
+
 ## 0.10.1 (2026-02-03)
 
 Full Changelog: [v0.10.0...v0.10.1](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.0...v0.10.1)
