@@ -8,7 +8,7 @@ const client = new Sequenzy({
 });
 
 describe('resource transactional', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.transactional.retrieve('welcome-email');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource transactional', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.transactional.list();
     const rawResponse = await responsePromise.asResponse();
@@ -32,7 +32,7 @@ describe('resource transactional', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('send: only required params', async () => {
     const responsePromise = client.transactional.send({ to: 'recipient@example.com' });
     const rawResponse = await responsePromise.asResponse();
@@ -44,7 +44,7 @@ describe('resource transactional', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('send: required and optional params', async () => {
     const response = await client.transactional.send({
       to: 'recipient@example.com',

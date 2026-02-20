@@ -8,7 +8,7 @@ const client = new Sequenzy({
 });
 
 describe('resource events', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('trigger: only required params', async () => {
     const responsePromise = client.subscribers.events.trigger({
       email: 'user@example.com',
@@ -23,7 +23,7 @@ describe('resource events', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('trigger: required and optional params', async () => {
     const response = await client.subscribers.events.trigger({
       email: 'user@example.com',
@@ -37,7 +37,7 @@ describe('resource events', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('triggerMultiple: only required params', async () => {
     const responsePromise = client.subscribers.events.triggerMultiple({
       email: 'user@example.com',
@@ -52,7 +52,7 @@ describe('resource events', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('triggerMultiple: required and optional params', async () => {
     const response = await client.subscribers.events.triggerMultiple({
       email: 'user@example.com',

@@ -8,7 +8,7 @@ const client = new Sequenzy({
 });
 
 describe('resource preferences', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generateToken: only required params', async () => {
     const responsePromise = client.widgets.preferences.generateToken({ email: 'user@example.com' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource preferences', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generateToken: required and optional params', async () => {
     const response = await client.widgets.preferences.generateToken({ email: 'user@example.com' });
   });
