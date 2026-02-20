@@ -8,7 +8,7 @@ const client = new Sequenzy({
 });
 
 describe('resource tags', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('add: only required params', async () => {
     const responsePromise = client.subscribers.tags.add({ email: 'user@example.com', tag: 'premium' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource tags', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('add: required and optional params', async () => {
     const response = await client.subscribers.tags.add({
       email: 'user@example.com',
@@ -29,7 +29,7 @@ describe('resource tags', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('addMultiple: only required params', async () => {
     const responsePromise = client.subscribers.tags.addMultiple({
       email: 'user@example.com',
@@ -44,7 +44,7 @@ describe('resource tags', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('addMultiple: required and optional params', async () => {
     const response = await client.subscribers.tags.addMultiple({
       email: 'user@example.com',
