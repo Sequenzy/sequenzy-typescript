@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.10.3 (2026-02-24)
+
+Full Changelog: [v0.10.2...v0.10.3](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.2...v0.10.3)
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([05f7066](https://github.com/Sequenzy/sequenzy-typescript/commit/05f70666e1ea51bb5028692b8691128c030be283))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([c3ef1b5](https://github.com/Sequenzy/sequenzy-typescript/commit/c3ef1b574a82ece7aed98626befe1e669dbba4e5))
+* **internal:** avoid type checking errors with ts-reset ([7680eb4](https://github.com/Sequenzy/sequenzy-typescript/commit/7680eb49a0a88b136f07dcd143411645603e772b))
+* **internal:** remove mock server code ([e7d4030](https://github.com/Sequenzy/sequenzy-typescript/commit/e7d4030913e9ca5b53d39a3d95f43fc9e26fd919))
+* **internal:** upgrade pnpm ([8453699](https://github.com/Sequenzy/sequenzy-typescript/commit/84536992dd61a7bfb57ee9f34531301e1a90eab8))
+* **internal:** upgrade pnpm version ([27a5a17](https://github.com/Sequenzy/sequenzy-typescript/commit/27a5a1744b110a75bd51aad037e7ee0d12788e7b))
+* update mock server docs ([95cbf9b](https://github.com/Sequenzy/sequenzy-typescript/commit/95cbf9b05f468e93a4d5d6f820632559a5cbbcc1))
+
 ## 0.10.2 (2026-02-06)
 
 Full Changelog: [v0.10.1...v0.10.2](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.1...v0.10.2)
