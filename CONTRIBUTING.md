@@ -60,7 +60,7 @@ $ yarn link sequenzy
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global sequenzy
+$ pnpm link --global sequenzy
 ```
 
 ## Running tests
