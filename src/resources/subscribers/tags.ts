@@ -4,6 +4,9 @@ import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Manage subscribers, tags, and events
+ */
 export class Tags extends APIResource {
   /**
    * Adds a tag to a subscriber. Creates the subscriber if they don't exist. Creates

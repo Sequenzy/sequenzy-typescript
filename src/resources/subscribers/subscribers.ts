@@ -16,6 +16,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Manage subscribers, tags, and events
+ */
 export class Subscribers extends APIResource {
   tags: TagsAPI.Tags = new TagsAPI.Tags(this._client);
   events: EventsAPI.Events = new EventsAPI.Events(this._client);
