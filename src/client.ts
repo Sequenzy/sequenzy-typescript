@@ -737,7 +737,13 @@ export class Sequenzy {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Manage subscribers, tags, and events
+   */
   subscribers: API.Subscribers = new API.Subscribers(this);
+  /**
+   * Send and manage transactional emails
+   */
   transactional: API.Transactional = new API.Transactional(this);
   widgets: API.Widgets = new API.Widgets(this);
 }

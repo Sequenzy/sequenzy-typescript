@@ -4,6 +4,9 @@ import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Embeddable widgets for your website
+ */
 export class Preferences extends APIResource {
   /**
    * Generate a signed token to embed the subscription preferences widget for a
