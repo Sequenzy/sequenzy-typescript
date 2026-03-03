@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Send and manage transactional emails
+ */
 export class Transactional extends APIResource {
   /**
    * Gets details of a transactional email template including available template

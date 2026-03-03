@@ -4,6 +4,9 @@ import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Manage subscribers, tags, and events
+ */
 export class Events extends APIResource {
   /**
    * Triggers an event for a subscriber. Creates the subscriber if they don't exist.
