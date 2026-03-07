@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.10.4 (2026-03-07)
+
+Full Changelog: [v0.10.3...v0.10.4](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.3...v0.10.4)
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([818527b](https://github.com/Sequenzy/sequenzy-typescript/commit/818527bd565f84c5c036ee9599aa90b1b70dddde))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([84cf84b](https://github.com/Sequenzy/sequenzy-typescript/commit/84cf84b109cec455422cfea2ef4d5271b7bfaa63))
+* **internal:** codegen related update ([54ea50a](https://github.com/Sequenzy/sequenzy-typescript/commit/54ea50af92ea4e5c7b29b5492f4ca7a1bbd161ea))
+* **internal:** codegen related update ([a866372](https://github.com/Sequenzy/sequenzy-typescript/commit/a8663728b9519f64b0250f25c6db1aedbe30acf4))
+* **internal:** move stringifyQuery implementation to internal function ([e5b41f0](https://github.com/Sequenzy/sequenzy-typescript/commit/e5b41f0db867e4210f13e70524f6271a31a5ef13))
+
 ## 0.10.3 (2026-02-24)
 
 Full Changelog: [v0.10.2...v0.10.3](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.2...v0.10.3)
