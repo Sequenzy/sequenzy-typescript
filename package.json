@@ -1,6 +1,6 @@
 {
   "name": "sequenzy",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "The official TypeScript library for the Sequenzy API",
   "author": "Sequenzy <nic@sequenzy.com>",
   "types": "dist/index.d.ts",
