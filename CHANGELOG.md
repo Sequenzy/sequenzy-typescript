@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.11.0 (2026-04-11)
+
+Full Changelog: [v0.10.4...v0.11.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.4...v0.11.0)
+
+### Features
+
+* **api:** api update ([452f46c](https://github.com/Sequenzy/sequenzy-typescript/commit/452f46c2f046e5a156e2cd392241607aee62702b))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([c048fee](https://github.com/Sequenzy/sequenzy-typescript/commit/c048fee7478c106e656e85d4a2f8a2c0183f8101))
+* **internal:** codegen related update ([eabb59c](https://github.com/Sequenzy/sequenzy-typescript/commit/eabb59cfb9c350158744345d41317111aa37fc2c))
+* **internal:** tweak CI branches ([aeed8d1](https://github.com/Sequenzy/sequenzy-typescript/commit/aeed8d1781a163dea385f47b93c3f7fb4fdbe4ca))
+* **internal:** update dependencies to address dependabot vulnerabilities ([95e5d7d](https://github.com/Sequenzy/sequenzy-typescript/commit/95e5d7d1eb128b4915f95e3cc3e971441062b4b3))
+* **internal:** update gitignore ([e7292fa](https://github.com/Sequenzy/sequenzy-typescript/commit/e7292fa99ce5e9b82e44324fe1930282aceae876))
+
 ## 0.10.4 (2026-03-07)
 
 Full Changelog: [v0.10.3...v0.10.4](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.3...v0.10.4)
