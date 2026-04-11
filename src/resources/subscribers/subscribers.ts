@@ -45,7 +45,8 @@ export class Subscribers extends APIResource {
   }
 
   /**
-   * Retrieves a subscriber by their email address.
+   * Retrieves a subscriber by their email address, including list memberships,
+   * sequence enrollments, email stats, and recent activity.
    *
    * @example
    * ```ts
@@ -60,7 +61,8 @@ export class Subscribers extends APIResource {
 
   /**
    * Updates a subscriber's first name, last name, status, tags, or custom
-   * attributes.
+   * attributes. Setting `status` to `unsubscribed` performs the full unsubscribe
+   * workflow, including list unsubscription and sequence cancellation.
    *
    * @example
    * ```ts
@@ -76,7 +78,8 @@ export class Subscribers extends APIResource {
   }
 
   /**
-   * Lists subscribers with pagination and optional filtering by status or email.
+   * Lists subscribers with pagination and optional filtering by status, free-text
+   * query, tags, segment, or email.
    *
    * @example
    * ```ts
@@ -112,11 +115,13 @@ export interface Subscriber {
 
   email?: string;
 
+  emailProvider?: string | null;
+
   firstName?: string | null;
 
   lastName?: string | null;
 
-  status?: 'active' | 'unsubscribed';
+  status?: 'active' | 'unsubscribed' | 'bounced';
 
   tags?: Array<string>;
 
@@ -149,9 +154,97 @@ export namespace SubscriberCreateResponse {
 }
 
 export interface SubscriberRetrieveResponse {
-  subscriber?: Subscriber;
+  subscriber?: SubscriberRetrieveResponse.Subscriber;
 
   success?: boolean;
+}
+
+export namespace SubscriberRetrieveResponse {
+  export interface Subscriber extends SubscribersAPI.Subscriber {
+    activity?: Array<Subscriber.Activity>;
+
+    emailStats?: Subscriber.EmailStats | null;
+
+    lists?: Array<Subscriber.List>;
+
+    sequenceEnrollments?: Array<Subscriber.SequenceEnrollment>;
+  }
+
+  export namespace Subscriber {
+    export interface Activity {
+      id?: string;
+
+      bounceType?: string | null;
+
+      campaignId?: string | null;
+
+      clickedUrl?: string | null;
+
+      emailSendId?: string | null;
+
+      eventName?: string | null;
+
+      eventTime?: string;
+
+      eventType?: string;
+
+      properties?: { [key: string]: unknown } | null;
+    }
+
+    export interface EmailStats {
+      bounced?: number;
+
+      clicked?: number;
+
+      complained?: number;
+
+      delivered?: number;
+
+      opened?: number;
+
+      sent?: number;
+
+      unsubscribed?: number;
+    }
+
+    export interface List {
+      id?: string;
+
+      description?: string | null;
+
+      isPrivate?: boolean | null;
+
+      name?: string;
+
+      subscribedAt?: string;
+
+      unsubscribedAt?: string | null;
+    }
+
+    export interface SequenceEnrollment {
+      currentNodeId?: string;
+
+      currentNodeLabel?: string | null;
+
+      currentNodeType?: string | null;
+
+      enrollmentStatus?: string;
+
+      enteredAt?: string;
+
+      scheduledFor?: string | null;
+
+      sequenceId?: string;
+
+      sequenceName?: string;
+
+      sequenceStatus?: string;
+
+      tokenId?: string;
+
+      updatedAt?: string;
+    }
+  }
 }
 
 export interface SubscriberUpdateResponse {
@@ -228,6 +321,9 @@ export interface SubscriberUpdateParams {
 
   lastName?: string;
 
+  /**
+   * Setting `unsubscribed` performs a full global unsubscribe.
+   */
   status?: 'active' | 'unsubscribed';
 
   tags?: Array<string>;
@@ -235,7 +331,7 @@ export interface SubscriberUpdateParams {
 
 export interface SubscriberListParams {
   /**
-   * Filter by email (partial match)
+   * Legacy alias for a partial email search
    */
   email?: string;
 
@@ -250,9 +346,24 @@ export interface SubscriberListParams {
   page?: number;
 
   /**
+   * Free-text search across email, first name, last name, and tags
+   */
+  query?: string;
+
+  /**
+   * Filter by an existing segment ID
+   */
+  segmentId?: string;
+
+  /**
    * Filter by subscriber status
    */
-  status?: 'active' | 'unsubscribed';
+  status?: 'active' | 'unsubscribed' | 'bounced';
+
+  /**
+   * Comma-separated tag names. Subscribers must have all provided tags.
+   */
+  tags?: string;
 }
 
 Subscribers.Tags = Tags;
