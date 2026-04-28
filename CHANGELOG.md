@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.12.0 (2026-04-28)
+
+Full Changelog: [v0.11.0...v0.12.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.11.0...v0.12.0)
+
+### Features
+
+* support setting headers via env ([e15fc3a](https://github.com/Sequenzy/sequenzy-typescript/commit/e15fc3a67122a71f4e504231383b13e3c80c729d))
+
+
+### Chores
+
+* **internal:** codegen related update ([e8b6ae4](https://github.com/Sequenzy/sequenzy-typescript/commit/e8b6ae45f58a67f7c089a37ac2e01c98b88d775a))
+* **internal:** more robust bootstrap script ([8a4d458](https://github.com/Sequenzy/sequenzy-typescript/commit/8a4d458b92e70b1225a307071f98150d9bfb7ebf))
+
 ## 0.11.0 (2026-04-11)
 
 Full Changelog: [v0.10.4...v0.11.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.10.4...v0.11.0)
