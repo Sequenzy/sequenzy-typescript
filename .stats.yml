@@ -1,4 +1,4 @@
 configured_endpoints: 13
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/sequenzy%2Fsequenzy-7b3caee3396722c13074975580fb15e0d12d8565d94c48379d21a0652455f43f.yml
-openapi_spec_hash: 849eb214f1696940456cc2dda8eba9d0
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/sequenzy%2Fsequenzy-5dcea866d68e304b607aee54a6c2dd8a076ea95a4320dc3791f99b5e660a4b1a.yml
+openapi_spec_hash: f9ace78b0793b2bd93b98197948aa172
 config_hash: 51c1d1194ac58d8c8e3162839c8f84dd
