@@ -15,7 +15,6 @@ export {
 export {
   Transactional,
   type TransactionalEmail,
-  type TransactionalRetrieveResponse,
   type TransactionalListResponse,
   type TransactionalSendResponse,
   type TransactionalSendParams,

@@ -46,13 +46,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/transactional.ts">TransactionalEmail</a></code>
-- <code><a href="./src/resources/transactional.ts">TransactionalRetrieveResponse</a></code>
 - <code><a href="./src/resources/transactional.ts">TransactionalListResponse</a></code>
 - <code><a href="./src/resources/transactional.ts">TransactionalSendResponse</a></code>
 
 Methods:
 
-- <code title="get /transactional/{slug}">client.transactional.<a href="./src/resources/transactional.ts">retrieve</a>(slug) -> TransactionalRetrieveResponse</code>
 - <code title="get /transactional">client.transactional.<a href="./src/resources/transactional.ts">list</a>() -> TransactionalListResponse</code>
 - <code title="post /transactional/send">client.transactional.<a href="./src/resources/transactional.ts">send</a>({ ...params }) -> TransactionalSendResponse</code>
 
