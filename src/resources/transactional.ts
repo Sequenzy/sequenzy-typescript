@@ -1,30 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as TransactionalAPI from './transactional';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
-import { path } from '../internal/utils/path';
 
 /**
  * Send and manage transactional emails
  */
 export class Transactional extends APIResource {
-  /**
-   * Gets details of a transactional email template including available template
-   * variables.
-   *
-   * @example
-   * ```ts
-   * const transactional = await client.transactional.retrieve(
-   *   'welcome-email',
-   * );
-   * ```
-   */
-  retrieve(slug: string, options?: RequestOptions): APIPromise<TransactionalRetrieveResponse> {
-    return this._client.get(path`/transactional/${slug}`, options);
-  }
-
   /**
    * Lists all transactional email templates for your company.
    *
@@ -79,6 +62,8 @@ export interface TransactionalEmail {
 
   createdAt?: string;
 
+  emailId?: string;
+
   enabled?: boolean;
 
   name?: string;
@@ -86,18 +71,6 @@ export interface TransactionalEmail {
   slug?: string;
 
   updatedAt?: string;
-}
-
-export interface TransactionalRetrieveResponse {
-  success?: boolean;
-
-  transactional?: TransactionalRetrieveResponse.Transactional;
-}
-
-export namespace TransactionalRetrieveResponse {
-  export interface Transactional extends TransactionalAPI.TransactionalEmail {
-    variables?: Array<string>;
-  }
 }
 
 export interface TransactionalListResponse {
@@ -241,7 +214,6 @@ export namespace TransactionalSendParams {
 export declare namespace Transactional {
   export {
     type TransactionalEmail as TransactionalEmail,
-    type TransactionalRetrieveResponse as TransactionalRetrieveResponse,
     type TransactionalListResponse as TransactionalListResponse,
     type TransactionalSendResponse as TransactionalSendResponse,
     type TransactionalSendParams as TransactionalSendParams,
