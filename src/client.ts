@@ -21,7 +21,6 @@ import {
   Transactional,
   TransactionalEmail,
   TransactionalListResponse,
-  TransactionalRetrieveResponse,
   TransactionalSendParams,
   TransactionalSendResponse,
 } from './resources/transactional';
@@ -784,7 +783,6 @@ export declare namespace Sequenzy {
   export {
     Transactional as Transactional,
     type TransactionalEmail as TransactionalEmail,
-    type TransactionalRetrieveResponse as TransactionalRetrieveResponse,
     type TransactionalListResponse as TransactionalListResponse,
     type TransactionalSendResponse as TransactionalSendResponse,
     type TransactionalSendParams as TransactionalSendParams,
