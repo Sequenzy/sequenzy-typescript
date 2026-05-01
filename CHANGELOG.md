@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.13.0 (2026-05-01)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* **api:** api update ([71b0cab](https://github.com/Sequenzy/sequenzy-typescript/commit/71b0cab83b5795499f7c548a77fe06a7bec7be7f))
+
+
+### Chores
+
+* **format:** run eslint and prettier separately ([f5c0fa3](https://github.com/Sequenzy/sequenzy-typescript/commit/f5c0fa30f97eb3f176f425a74804e35f0e8944b4))
+
 ## 0.12.0 (2026-04-28)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.11.0...v0.12.0)
