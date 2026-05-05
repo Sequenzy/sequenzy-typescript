@@ -10,10 +10,7 @@ const client = new Sequenzy({
 describe('resource events', () => {
   // Mock server tests are disabled
   test.skip('trigger: only required params', async () => {
-    const responsePromise = client.subscribers.events.trigger({
-      email: 'user@example.com',
-      event: 'purchase.completed',
-    });
+    const responsePromise = client.subscribers.events.trigger({ event: 'purchase.completed' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,9 +23,10 @@ describe('resource events', () => {
   // Mock server tests are disabled
   test.skip('trigger: required and optional params', async () => {
     const response = await client.subscribers.events.trigger({
-      email: 'user@example.com',
       event: 'purchase.completed',
       customAttributes: { foo: 'bar' },
+      email: 'user@example.com',
+      externalId: 'user_123',
       properties: {
         amount: 'bar',
         currency: 'bar',
@@ -39,10 +37,7 @@ describe('resource events', () => {
 
   // Mock server tests are disabled
   test.skip('triggerMultiple: only required params', async () => {
-    const responsePromise = client.subscribers.events.triggerMultiple({
-      email: 'user@example.com',
-      events: [{ name: 'page.viewed' }],
-    });
+    const responsePromise = client.subscribers.events.triggerMultiple({ events: [{ name: 'page.viewed' }] });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,7 +50,6 @@ describe('resource events', () => {
   // Mock server tests are disabled
   test.skip('triggerMultiple: required and optional params', async () => {
     const response = await client.subscribers.events.triggerMultiple({
-      email: 'user@example.com',
       events: [
         {
           name: 'page.viewed',
@@ -63,6 +57,8 @@ describe('resource events', () => {
         },
       ],
       customAttributes: { foo: 'bar' },
+      email: 'user@example.com',
+      externalId: 'user_123',
     });
   });
 });

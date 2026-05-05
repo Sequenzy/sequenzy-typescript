@@ -9,8 +9,8 @@ const client = new Sequenzy({
 
 describe('resource subscribers', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.subscribers.create({ email: 'user@example.com' });
+  test.skip('create', async () => {
+    const responsePromise = client.subscribers.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,21 +18,6 @@ describe('resource subscribers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.subscribers.create({
-      email: 'user@example.com',
-      customAttributes: { plan: 'bar' },
-      duplicateStrategy: 'skip',
-      enrollInSequences: true,
-      firstName: 'John',
-      lastName: 'Doe',
-      lists: ['list-id-1', 'list-id-2'],
-      status: 'active',
-      tags: ['newsletter'],
-    });
   });
 
   // Mock server tests are disabled

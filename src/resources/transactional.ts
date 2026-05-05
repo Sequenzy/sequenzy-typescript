@@ -40,8 +40,9 @@ export class Transactional extends APIResource {
    * - Any file type supported (PDFs, images, documents, etc.)
    *
    * Optionally set `from` (domain must be verified) and `replyTo` addresses.
-   * Variables can be passed to customize the email content. Returns immediately with
-   * a job ID.
+   * Variables can be passed to customize the email content. Nested objects and
+   * arrays are supported for repeat blocks, such as `items`. Returns immediately
+   * with a job ID.
    *
    * @example
    * ```ts
@@ -182,7 +183,15 @@ export interface TransactionalSendParams {
   subject?: string;
 
   /**
-   * Variables for template replacement (works with both modes)
+   * Customer-owned subscriber ID for attaching analytics and localization on
+   * single-recipient sends. Only valid when sending to exactly one recipient with no
+   * cc/bcc.
+   */
+  subscriberExternalId?: string;
+
+  /**
+   * Variables for template replacement (works with both modes). Values can be
+   * scalars, nested objects, or arrays used by repeat blocks.
    */
   variables?: { [key: string]: unknown };
 }
