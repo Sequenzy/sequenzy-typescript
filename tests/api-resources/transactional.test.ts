@@ -52,6 +52,7 @@ describe('resource transactional', () => {
       replyTo: 'Support <support@example.com>',
       slug: 'welcome-email',
       subject: 'Welcome to our platform!',
+      subscriberExternalId: 'user_123',
       variables: { NAME: 'bar' },
     });
   });
