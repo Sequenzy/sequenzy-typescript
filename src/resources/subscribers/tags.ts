@@ -15,7 +15,6 @@ export class Tags extends APIResource {
    * @example
    * ```ts
    * const response = await client.subscribers.tags.add({
-   *   email: 'user@example.com',
    *   tag: 'premium',
    * });
    * ```
@@ -31,7 +30,6 @@ export class Tags extends APIResource {
    * @example
    * ```ts
    * const response = await client.subscribers.tags.addMultiple({
-   *   email: 'user@example.com',
    *   tags: ['premium', 'newsletter', 'vip'],
    * });
    * ```
@@ -108,22 +106,40 @@ export namespace TagAddMultipleResponse {
 }
 
 export interface TagAddParams {
-  email: string;
-
   tag: string;
 
   /**
    * Optional attributes to set on the subscriber if created
    */
   customAttributes?: { [key: string]: unknown };
+
+  /**
+   * Required when creating a new subscriber. Optional when externalId identifies an
+   * existing subscriber.
+   */
+  email?: string;
+
+  /**
+   * Customer-owned app/customer/user ID
+   */
+  externalId?: string;
 }
 
 export interface TagAddMultipleParams {
-  email: string;
-
   tags: Array<string>;
 
   customAttributes?: { [key: string]: unknown };
+
+  /**
+   * Required when creating a new subscriber. Optional when externalId identifies an
+   * existing subscriber.
+   */
+  email?: string;
+
+  /**
+   * Customer-owned app/customer/user ID
+   */
+  externalId?: string;
 }
 
 export declare namespace Tags {

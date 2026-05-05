@@ -15,7 +15,6 @@ export class Events extends APIResource {
    * @example
    * ```ts
    * const response = await client.subscribers.events.trigger({
-   *   email: 'user@example.com',
    *   event: 'purchase.completed',
    * });
    * ```
@@ -26,13 +25,14 @@ export class Events extends APIResource {
 
   /**
    * Triggers multiple events for a subscriber. Creates the subscriber if they don't
-   * exist. Creates event definitions if they don't exist.
+   * exist. Creates event definitions if they don't exist. Events are processed
+   * independently, so an error response may still include events that were already
+   * triggered.
    *
    * @example
    * ```ts
    * const response =
    *   await client.subscribers.events.triggerMultiple({
-   *     email: 'user@example.com',
    *     events: [{ name: 'page.viewed' }],
    *   });
    * ```
@@ -104,8 +104,6 @@ export namespace EventTriggerMultipleResponse {
 }
 
 export interface EventTriggerParams {
-  email: string;
-
   event: string;
 
   /**
@@ -114,17 +112,37 @@ export interface EventTriggerParams {
   customAttributes?: { [key: string]: unknown };
 
   /**
+   * Required when creating a new subscriber. Optional when externalId identifies an
+   * existing subscriber.
+   */
+  email?: string;
+
+  /**
+   * Customer-owned app/customer/user ID
+   */
+  externalId?: string;
+
+  /**
    * Event properties/metadata
    */
   properties?: { [key: string]: unknown };
 }
 
 export interface EventTriggerMultipleParams {
-  email: string;
-
   events: Array<EventTriggerMultipleParams.Event>;
 
   customAttributes?: { [key: string]: unknown };
+
+  /**
+   * Required when creating a new subscriber. Optional when externalId identifies an
+   * existing subscriber.
+   */
+  email?: string;
+
+  /**
+   * Customer-owned app/customer/user ID
+   */
+  externalId?: string;
 }
 
 export namespace EventTriggerMultipleParams {

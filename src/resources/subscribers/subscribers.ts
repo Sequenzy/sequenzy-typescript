@@ -35,9 +35,7 @@ export class Subscribers extends APIResource {
    *
    * @example
    * ```ts
-   * const subscriber = await client.subscribers.create({
-   *   email: 'user@example.com',
-   * });
+   * const subscriber = await client.subscribers.create();
    * ```
    */
   create(body: SubscriberCreateParams, options?: RequestOptions): APIPromise<SubscriberCreateResponse> {
@@ -116,6 +114,11 @@ export interface Subscriber {
   email?: string;
 
   emailProvider?: string | null;
+
+  /**
+   * Customer-owned app/customer/user ID for this subscriber
+   */
+  externalId?: string | null;
 
   firstName?: string | null;
 
@@ -280,8 +283,6 @@ export interface SubscriberDeleteResponse {
 }
 
 export interface SubscriberCreateParams {
-  email: string;
-
   customAttributes?: { [key: string]: unknown };
 
   /**
@@ -294,10 +295,21 @@ export interface SubscriberCreateParams {
   duplicateStrategy?: 'skip' | 'merge' | 'overwrite';
 
   /**
+   * Required when creating a new subscriber. Optional when externalId identifies an
+   * existing subscriber.
+   */
+  email?: string;
+
+  /**
    * Whether to enroll the subscriber in matching sequences. Defaults to true for API
    * calls.
    */
   enrollInSequences?: boolean;
+
+  /**
+   * Customer-owned app/customer/user ID. Unique per company when provided.
+   */
+  externalId?: string;
 
   firstName?: string;
 
