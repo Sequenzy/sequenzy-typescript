@@ -29,15 +29,17 @@ export class Transactional extends APIResource {
    * **Recipients:**
    *
    * - `to` can be a single email or an array of up to 50 emails
-   * - `cc` (carbon copy) recipients are visible to all recipients
-   * - `bcc` (blind carbon copy) recipients are hidden from other recipients
-   * - Duplicate emails across fields are automatically deduplicated
+   * - Duplicate emails are automatically deduplicated
    *
    * **Attachments:**
    *
    * - Attachments can be provided as Base64-encoded content or URLs
    * - Maximum total attachment size: 40MB per email
    * - Any file type supported (PDFs, images, documents, etc.)
+   *
+   * A successful response means the email was accepted for background processing. If
+   * a recipient is suppressed because of a bounce, complaint, or unsubscribe, the
+   * worker records the send as `suppressed` instead of delivering it.
    *
    * Optionally set `from` (domain must be verified) and `replyTo` addresses.
    * Variables can be passed to customize the email content. Nested objects and
@@ -86,10 +88,6 @@ export type TransactionalSendResponse =
 
 export namespace TransactionalSendResponse {
   export interface SlugBasedResponse {
-    bcc?: Array<string>;
-
-    cc?: Array<string>;
-
     jobId?: string;
 
     success?: boolean;
@@ -110,10 +108,6 @@ export namespace TransactionalSendResponse {
   }
 
   export interface DirectContentResponse {
-    bcc?: Array<string>;
-
-    cc?: Array<string>;
-
     jobId?: string;
 
     success?: boolean;
@@ -140,19 +134,9 @@ export interface TransactionalSendParams {
   attachments?: Array<TransactionalSendParams.Attachment>;
 
   /**
-   * Blind carbon copy recipients. These addresses are hidden from other recipients.
-   */
-  bcc?: Array<string>;
-
-  /**
    * Email body HTML content (required if not using slug)
    */
   body?: string;
-
-  /**
-   * Carbon copy recipients. These addresses are visible to all recipients.
-   */
-  cc?: Array<string>;
 
   /**
    * Custom from address. Format: "Name <email>" or just "email". The domain must be
@@ -184,8 +168,7 @@ export interface TransactionalSendParams {
 
   /**
    * Customer-owned subscriber ID for attaching analytics and localization on
-   * single-recipient sends. Only valid when sending to exactly one recipient with no
-   * cc/bcc.
+   * single-recipient sends. Only valid when sending to exactly one recipient.
    */
   subscriberExternalId?: string;
 
