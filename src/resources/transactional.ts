@@ -174,7 +174,10 @@ export interface TransactionalSendParams {
 
   /**
    * Variables for template replacement (works with both modes). Values can be
-   * scalars, nested objects, or arrays used by repeat blocks.
+   * scalars, nested objects, or arrays used by repeat blocks. Raw HTML templates can
+   * use simple subscriber/custom-attribute conditionals such as
+   * `{{#if subscriber.plan}}...{{else}}...{{/if}}` and
+   * `{{#unless subscriber.plan}}...{{/unless}}`.
    */
   variables?: { [key: string]: unknown };
 }
