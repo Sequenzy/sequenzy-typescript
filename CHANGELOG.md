@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.17.1 (2026-05-19)
+
+Full Changelog: [v0.17.0...v0.17.1](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.17.0...v0.17.1)
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([f150821](https://github.com/Sequenzy/sequenzy-typescript/commit/f1508213136de7695a7f92d6e8458e2c9cd1aad7))
+
+
+### Chores
+
+* **tests:** remove redundant File import ([a82deef](https://github.com/Sequenzy/sequenzy-typescript/commit/a82deefcd8531534021e3acd5076d92ab75d226e))
+
 ## 0.17.0 (2026-05-19)
 
 Full Changelog: [v0.16.0...v0.17.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.16.0...v0.17.0)
