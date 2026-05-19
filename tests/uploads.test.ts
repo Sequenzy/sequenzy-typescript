@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from 'sequenzy/internal/to-file';
 import { toFile } from 'sequenzy/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
