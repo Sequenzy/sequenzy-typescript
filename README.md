@@ -28,7 +28,7 @@ const client = new Sequenzy({
 
 const subscriber = await client.subscribers.create({ firstName: 'User', lastName: 'TheBest' });
 
-console.log(subscriber.subscriber);
+console.log(subscriber.optIn);
 ```
 
 ### Request & Response types
@@ -149,7 +149,7 @@ const { data: subscriber, response: raw } = await client.subscribers
   .create({ firstName: 'User', lastName: 'TheBest' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(subscriber.subscriber);
+console.log(subscriber.optIn);
 ```
 
 ### Logging

@@ -9,8 +9,9 @@ import { RequestOptions } from '../../internal/request-options';
  */
 export class Events extends APIResource {
   /**
-   * Triggers an event for a subscriber. Creates the subscriber if they don't exist.
-   * Creates the event definition if it doesn't exist.
+   * Triggers an event for a subscriber. Creates the subscriber if they don't exist
+   * and applies the workspace default lists setting. Creates the event definition if
+   * it doesn't exist.
    *
    * @example
    * ```ts
@@ -25,9 +26,9 @@ export class Events extends APIResource {
 
   /**
    * Triggers multiple events for a subscriber. Creates the subscriber if they don't
-   * exist. Creates event definitions if they don't exist. Events are processed
-   * independently, so an error response may still include events that were already
-   * triggered.
+   * exist and applies the workspace default lists setting. Creates event definitions
+   * if they don't exist. Events are processed independently, so an error response
+   * may still include events that were already triggered.
    *
    * @example
    * ```ts
