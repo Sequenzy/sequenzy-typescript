@@ -132,12 +132,26 @@ export interface Subscriber {
 }
 
 export interface SubscriberCreateResponse {
+  /**
+   * Present when the subscriber is awaiting double opt-in confirmation.
+   */
+  optIn?: SubscriberCreateResponse.OptIn;
+
   subscriber?: SubscriberCreateResponse.Subscriber;
 
   success?: boolean;
 }
 
 export namespace SubscriberCreateResponse {
+  /**
+   * Present when the subscriber is awaiting double opt-in confirmation.
+   */
+  export interface OptIn {
+    emailQueued?: boolean;
+
+    required?: boolean;
+  }
+
   export interface Subscriber extends SubscribersAPI.Subscriber {
     /**
      * Whether the subscriber was newly created
@@ -316,12 +330,26 @@ export interface SubscriberCreateParams {
   lastName?: string;
 
   /**
-   * List IDs to add subscriber to. If not provided, subscriber is added to ALL
-   * company lists. If empty array, subscriber is added to NO lists.
+   * List IDs to add subscriber to. If not provided, subscriber follows the workspace
+   * default lists setting. If empty array, subscriber is added to NO lists.
    */
   lists?: Array<string>;
 
-  status?: 'active' | 'unsubscribed';
+  /**
+   * Consent handling for this request:
+   *
+   * - `default`: obey the company double opt-in setting for new active subscribers;
+   *   existing unsubscribed contacts are not sent confirmation email
+   * - `confirmed`: create or keep active immediately when you have verified consent
+   * - `double_opt_in`: send a confirmation email and keep the contact unsubscribed
+   *   until they confirm
+   */
+  optInMode?: 'default' | 'confirmed' | 'double_opt_in';
+
+  /**
+   * Initial subscriber status.
+   */
+  status?: 'active' | 'unsubscribed' | 'bounced';
 
   tags?: Array<string>;
 }
@@ -336,7 +364,7 @@ export interface SubscriberUpdateParams {
   /**
    * Setting `unsubscribed` performs a full global unsubscribe.
    */
-  status?: 'active' | 'unsubscribed';
+  status?: 'active' | 'unsubscribed' | 'bounced';
 
   tags?: Array<string>;
 }
