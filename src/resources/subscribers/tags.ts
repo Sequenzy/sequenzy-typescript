@@ -123,6 +123,16 @@ export interface TagAddParams {
    * Customer-owned app/customer/user ID
    */
   externalId?: string;
+
+  /**
+   * First name to set if creating the subscriber.
+   */
+  firstName?: string;
+
+  /**
+   * Last name to set if creating the subscriber.
+   */
+  lastName?: string;
 }
 
 export interface TagAddMultipleParams {
@@ -140,6 +150,16 @@ export interface TagAddMultipleParams {
    * Customer-owned app/customer/user ID
    */
   externalId?: string;
+
+  /**
+   * First name to set if creating the subscriber.
+   */
+  firstName?: string;
+
+  /**
+   * Last name to set if creating the subscriber.
+   */
+  lastName?: string;
 }
 
 export declare namespace Tags {

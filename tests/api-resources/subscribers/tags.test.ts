@@ -27,6 +27,8 @@ describe('resource tags', () => {
       customAttributes: { foo: 'bar' },
       email: 'user@example.com',
       externalId: 'user_123',
+      firstName: 'John',
+      lastName: 'Doe',
     });
   });
 
@@ -49,6 +51,8 @@ describe('resource tags', () => {
       customAttributes: { foo: 'bar' },
       email: 'user@example.com',
       externalId: 'user_123',
+      firstName: 'John',
+      lastName: 'Doe',
     });
   });
 });

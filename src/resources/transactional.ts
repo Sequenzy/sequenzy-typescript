@@ -134,9 +134,21 @@ export interface TransactionalSendParams {
   attachments?: Array<TransactionalSendParams.Attachment>;
 
   /**
+   * Blind-carbon-copy recipient email address(es). Duplicates already present in
+   * `to` or `cc` are removed.
+   */
+  bcc?: string | Array<string>;
+
+  /**
    * Email body HTML content (required if not using slug)
    */
   body?: string;
+
+  /**
+   * Visible carbon-copy recipient email address(es). Duplicates already present in
+   * `to` are removed.
+   */
+  cc?: string | Array<string>;
 
   /**
    * Custom from address. Format: "Name <email>" or just "email". The domain must be
