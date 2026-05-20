@@ -124,6 +124,16 @@ export interface EventTriggerParams {
   externalId?: string;
 
   /**
+   * First name to set if creating the subscriber.
+   */
+  firstName?: string;
+
+  /**
+   * Last name to set if creating the subscriber.
+   */
+  lastName?: string;
+
+  /**
    * Event properties/metadata
    */
   properties?: { [key: string]: unknown };
@@ -144,6 +154,16 @@ export interface EventTriggerMultipleParams {
    * Customer-owned app/customer/user ID
    */
   externalId?: string;
+
+  /**
+   * First name to set if creating the subscriber.
+   */
+  firstName?: string;
+
+  /**
+   * Last name to set if creating the subscriber.
+   */
+  lastName?: string;
 }
 
 export namespace EventTriggerMultipleParams {
