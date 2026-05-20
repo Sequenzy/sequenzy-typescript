@@ -27,6 +27,8 @@ describe('resource events', () => {
       customAttributes: { foo: 'bar' },
       email: 'user@example.com',
       externalId: 'user_123',
+      firstName: 'John',
+      lastName: 'Doe',
       properties: {
         amount: 'bar',
         currency: 'bar',
@@ -59,6 +61,8 @@ describe('resource events', () => {
       customAttributes: { foo: 'bar' },
       email: 'user@example.com',
       externalId: 'user_123',
+      firstName: 'John',
+      lastName: 'Doe',
     });
   });
 });

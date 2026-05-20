@@ -357,6 +357,16 @@ export interface SubscriberCreateParams {
 export interface SubscriberUpdateParams {
   customAttributes?: { [key: string]: unknown };
 
+  /**
+   * New delivery email. Fails with 409 if another subscriber owns it.
+   */
+  email?: string;
+
+  /**
+   * New customer-owned external ID. Fails with 409 if another subscriber owns it.
+   */
+  externalId?: string;
+
   firstName?: string;
 
   lastName?: string;
