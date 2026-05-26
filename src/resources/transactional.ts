@@ -37,9 +37,10 @@ export class Transactional extends APIResource {
    * - Maximum total attachment size: 40MB per email
    * - Any file type supported (PDFs, images, documents, etc.)
    *
-   * A successful response means the email was accepted for background processing. If
-   * a recipient is suppressed because of a bounce, complaint, or unsubscribe, the
-   * worker records the send as `suppressed` instead of delivering it.
+   * A successful response means the email was accepted for background processing.
+   * Transactional emails are not blocked by subscriber unsubscribe or double opt-in
+   * status. If a recipient is suppressed because of a hard bounce or spam complaint,
+   * the worker records the send as `suppressed` instead of delivering it.
    *
    * Optionally set `from` (domain must be verified) and `replyTo` addresses.
    * Variables can be passed to customize the email content. Nested objects and
