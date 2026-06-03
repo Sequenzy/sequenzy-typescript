@@ -64,6 +64,9 @@ describe('resource subscribers', () => {
         {
           email: 'email',
           limit: 100,
+          list: 'list',
+          listId: 'listId',
+          listName: 'listName',
           page: 0,
           query: 'query',
           segmentId: 'segmentId',
