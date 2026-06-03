@@ -77,7 +77,7 @@ export class Subscribers extends APIResource {
 
   /**
    * Lists subscribers with pagination and optional filtering by status, free-text
-   * query, tags, segment, or email.
+   * query, tags, list, segment, or email.
    *
    * @example
    * ```ts
@@ -391,6 +391,21 @@ export interface SubscriberListParams {
   limit?: number;
 
   /**
+   * Subscriber list ID or exact list name. The API tries ID first, then exact name.
+   */
+  list?: string;
+
+  /**
+   * Filter by subscriber list ID.
+   */
+  listId?: string;
+
+  /**
+   * Filter by exact subscriber list name when the list ID is not known.
+   */
+  listName?: string;
+
+  /**
    * Page number
    */
   page?: number;
@@ -406,9 +421,9 @@ export interface SubscriberListParams {
   segmentId?: string;
 
   /**
-   * Filter by subscriber status
+   * Filter by subscriber status. Use all to disable status filtering.
    */
-  status?: 'active' | 'unsubscribed' | 'bounced';
+  status?: 'active' | 'unsubscribed' | 'bounced' | 'all';
 
   /**
    * Comma-separated tag names. Subscribers must have all provided tags.
