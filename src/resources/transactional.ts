@@ -42,10 +42,16 @@ export class Transactional extends APIResource {
    * status. If a recipient is suppressed because of a hard bounce or spam complaint,
    * the worker records the send as `suppressed` instead of delivering it.
    *
-   * Optionally set `from` (domain must be verified) and `replyTo` addresses.
-   * Variables can be passed to customize the email content. Nested objects and
-   * arrays are supported for repeat blocks, such as `items`. Returns immediately
-   * with a job ID.
+   * Optionally set `from` (domain must be verified) and `replyTo` addresses. When
+   * reply tracking is enabled, Sequenzy uses a unique trackable `Reply-To` header
+   * and treats the provided `replyTo` as the forwarding destination for captured
+   * replies. For direct-content sends with reply tracking and reply forwarding
+   * enabled, omitting `replyTo` forwards replies to the company's default reply
+   * profile, then falls back to the first reply profile in the company. If no reply
+   * profile exists, replies are captured in Sequenzy but are not forwarded
+   * externally. Variables can be passed to customize the email content. Nested
+   * objects and arrays are supported for repeat blocks, such as `items`. Returns
+   * immediately with a job ID.
    *
    * @example
    * ```ts
@@ -164,7 +170,14 @@ export interface TransactionalSendParams {
 
   /**
    * Reply-to address. Format: "Name <email>" or just "email". Can be any valid email
-   * address.
+   * address. When reply tracking is disabled, this value is sent as the email's
+   * `Reply-To` header. When reply tracking is enabled, Sequenzy sends a unique
+   * trackable `Reply-To` header and stores this value as the forwarding destination
+   * for replies. For direct-content sends with reply tracking and reply forwarding
+   * enabled, omitting this field forwards replies to the company's default reply
+   * profile, then falls back to the first reply profile in the company. If no reply
+   * profile exists, replies are captured in Sequenzy but are not forwarded
+   * externally.
    */
   replyTo?: string;
 
