@@ -193,8 +193,10 @@ export interface TransactionalSendParams {
   subject?: string;
 
   /**
-   * Customer-owned subscriber ID for attaching analytics and localization on
-   * single-recipient sends. Only valid when sending to exactly one recipient.
+   * Customer-owned subscriber ID for single-recipient sends. If it matches an
+   * existing subscriber, analytics and localization use that subscriber; the value
+   * is also stored on the send and emitted as external_id in outbound email webhooks
+   * even when no subscriber exists. Maximum length is 255 characters.
    */
   subscriberExternalId?: string;
 
