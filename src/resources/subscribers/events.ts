@@ -11,7 +11,9 @@ export class Events extends APIResource {
   /**
    * Triggers an event for a subscriber. Creates the subscriber if they don't exist
    * and applies the workspace default lists setting. Creates the event definition if
-   * it doesn't exist.
+   * it doesn't exist. When the workspace has double opt-in enabled, a brand-new
+   * subscriber is created pending confirmation, the confirmation email is queued,
+   * and matching sequences wait at their trigger until the subscriber confirms.
    *
    * @example
    * ```ts
@@ -28,7 +30,10 @@ export class Events extends APIResource {
    * Triggers multiple events for a subscriber. Creates the subscriber if they don't
    * exist and applies the workspace default lists setting. Creates event definitions
    * if they don't exist. Events are processed independently, so an error response
-   * may still include events that were already triggered.
+   * may still include events that were already triggered. When the workspace has
+   * double opt-in enabled, a brand-new subscriber is created pending confirmation, a
+   * single confirmation email is queued for the request, and matching sequences wait
+   * at their trigger until the subscriber confirms.
    *
    * @example
    * ```ts
@@ -48,6 +53,13 @@ export class Events extends APIResource {
 
 export interface EventTriggerResponse {
   event?: EventTriggerResponse.Event;
+
+  /**
+   * Present when this event created a brand-new subscriber while workspace double
+   * opt-in is enabled. The subscriber stays pending and matching sequences wait
+   * until they confirm.
+   */
+  optIn?: EventTriggerResponse.OptIn;
 
   subscriber?: EventTriggerResponse.Subscriber;
 
@@ -69,6 +81,17 @@ export namespace EventTriggerResponse {
     name?: string;
   }
 
+  /**
+   * Present when this event created a brand-new subscriber while workspace double
+   * opt-in is enabled. The subscriber stays pending and matching sequences wait
+   * until they confirm.
+   */
+  export interface OptIn {
+    emailQueued?: boolean;
+
+    required?: boolean;
+  }
+
   export interface Subscriber {
     id?: string;
 
@@ -80,6 +103,13 @@ export namespace EventTriggerResponse {
 
 export interface EventTriggerMultipleResponse {
   events?: Array<EventTriggerMultipleResponse.Event>;
+
+  /**
+   * Present when this request created a brand-new subscriber while workspace double
+   * opt-in is enabled. The subscriber stays pending and matching sequences wait
+   * until they confirm.
+   */
+  optIn?: EventTriggerMultipleResponse.OptIn;
 
   subscriber?: EventTriggerMultipleResponse.Subscriber;
 
@@ -93,6 +123,17 @@ export namespace EventTriggerMultipleResponse {
     definitionCreated?: boolean;
 
     name?: string;
+  }
+
+  /**
+   * Present when this request created a brand-new subscriber while workspace double
+   * opt-in is enabled. The subscriber stays pending and matching sequences wait
+   * until they confirm.
+   */
+  export interface OptIn {
+    emailQueued?: boolean;
+
+    required?: boolean;
   }
 
   export interface Subscriber {

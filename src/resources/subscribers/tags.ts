@@ -10,7 +10,10 @@ import { RequestOptions } from '../../internal/request-options';
 export class Tags extends APIResource {
   /**
    * Adds a tag to a subscriber. Creates the subscriber if they don't exist. Creates
-   * the tag definition if it doesn't exist.
+   * the tag definition if it doesn't exist. When the workspace has double opt-in
+   * enabled, a brand-new subscriber is created pending confirmation, the
+   * confirmation email is queued, and tag automations wait at their trigger until
+   * the subscriber confirms.
    *
    * @example
    * ```ts
@@ -25,7 +28,10 @@ export class Tags extends APIResource {
 
   /**
    * Adds multiple tags to a subscriber. Creates the subscriber if they don't exist.
-   * Creates tag definitions if they don't exist.
+   * Creates tag definitions if they don't exist. When the workspace has double
+   * opt-in enabled, a brand-new subscriber is created pending confirmation, the
+   * confirmation email is queued, and tag automations wait at their trigger until
+   * the subscriber confirms.
    *
    * @example
    * ```ts
@@ -40,6 +46,13 @@ export class Tags extends APIResource {
 }
 
 export interface TagAddResponse {
+  /**
+   * Present when this request created a brand-new subscriber while workspace double
+   * opt-in is enabled. The tag is applied, but the subscriber stays pending and tag
+   * automations wait until they confirm.
+   */
+  optIn?: TagAddResponse.OptIn;
+
   subscriber?: TagAddResponse.Subscriber;
 
   success?: boolean;
@@ -48,6 +61,17 @@ export interface TagAddResponse {
 }
 
 export namespace TagAddResponse {
+  /**
+   * Present when this request created a brand-new subscriber while workspace double
+   * opt-in is enabled. The tag is applied, but the subscriber stays pending and tag
+   * automations wait until they confirm.
+   */
+  export interface OptIn {
+    emailQueued?: boolean;
+
+    required?: boolean;
+  }
+
   export interface Subscriber {
     id?: string;
 
@@ -74,6 +98,13 @@ export namespace TagAddResponse {
 }
 
 export interface TagAddMultipleResponse {
+  /**
+   * Present when this request created a brand-new subscriber while workspace double
+   * opt-in is enabled. The tags are applied, but the subscriber stays pending and
+   * tag automations wait until they confirm.
+   */
+  optIn?: TagAddMultipleResponse.OptIn;
+
   subscriber?: TagAddMultipleResponse.Subscriber;
 
   success?: boolean;
@@ -82,6 +113,17 @@ export interface TagAddMultipleResponse {
 }
 
 export namespace TagAddMultipleResponse {
+  /**
+   * Present when this request created a brand-new subscriber while workspace double
+   * opt-in is enabled. The tags are applied, but the subscriber stays pending and
+   * tag automations wait until they confirm.
+   */
+  export interface OptIn {
+    emailQueued?: boolean;
+
+    required?: boolean;
+  }
+
   export interface Subscriber {
     id?: string;
 
