@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.22.1 (2026-06-17)
+
+Full Changelog: [v0.22.0...v0.22.1](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.22.0...v0.22.1)
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([6029fbd](https://github.com/Sequenzy/sequenzy-typescript/commit/6029fbdf5e0f68d92f1f2420c4660d37efdfed3a))
+
 ## 0.22.0 (2026-06-12)
 
 Full Changelog: [v0.21.0...v0.22.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.21.0...v0.22.0)
