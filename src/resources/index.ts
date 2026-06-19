@@ -9,6 +9,7 @@ export {
   type SubscriberListResponse,
   type SubscriberDeleteResponse,
   type SubscriberCreateParams,
+  type SubscriberRetrieveParams,
   type SubscriberUpdateParams,
   type SubscriberListParams,
 } from './subscribers/subscribers';
