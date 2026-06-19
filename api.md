@@ -12,7 +12,7 @@ Types:
 Methods:
 
 - <code title="post /subscribers">client.subscribers.<a href="./src/resources/subscribers/subscribers.ts">create</a>({ ...params }) -> SubscriberCreateResponse</code>
-- <code title="get /subscribers/{email}">client.subscribers.<a href="./src/resources/subscribers/subscribers.ts">retrieve</a>(email) -> SubscriberRetrieveResponse</code>
+- <code title="get /subscribers/{email}">client.subscribers.<a href="./src/resources/subscribers/subscribers.ts">retrieve</a>(email, { ...params }) -> SubscriberRetrieveResponse</code>
 - <code title="patch /subscribers/{email}">client.subscribers.<a href="./src/resources/subscribers/subscribers.ts">update</a>(email, { ...params }) -> SubscriberUpdateResponse</code>
 - <code title="get /subscribers">client.subscribers.<a href="./src/resources/subscribers/subscribers.ts">list</a>({ ...params }) -> SubscriberListResponse</code>
 - <code title="delete /subscribers/{email}">client.subscribers.<a href="./src/resources/subscribers/subscribers.ts">delete</a>(email) -> SubscriberDeleteResponse</code>

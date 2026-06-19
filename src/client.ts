@@ -31,6 +31,7 @@ import {
   SubscriberDeleteResponse,
   SubscriberListParams,
   SubscriberListResponse,
+  SubscriberRetrieveParams,
   SubscriberRetrieveResponse,
   SubscriberUpdateParams,
   SubscriberUpdateResponse,
@@ -784,6 +785,7 @@ export declare namespace Sequenzy {
     type SubscriberListResponse as SubscriberListResponse,
     type SubscriberDeleteResponse as SubscriberDeleteResponse,
     type SubscriberCreateParams as SubscriberCreateParams,
+    type SubscriberRetrieveParams as SubscriberRetrieveParams,
     type SubscriberUpdateParams as SubscriberUpdateParams,
     type SubscriberListParams as SubscriberListParams,
   };

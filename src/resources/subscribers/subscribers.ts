@@ -53,8 +53,12 @@ export class Subscribers extends APIResource {
    * );
    * ```
    */
-  retrieve(email: string, options?: RequestOptions): APIPromise<SubscriberRetrieveResponse> {
-    return this._client.get(path`/subscribers/${email}`, options);
+  retrieve(
+    email: string,
+    query: SubscriberRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<SubscriberRetrieveResponse> {
+    return this._client.get(path`/subscribers/${email}`, { query, ...options });
   }
 
   /**
@@ -195,15 +199,30 @@ export namespace SubscriberRetrieveResponse {
 
       campaignId?: string | null;
 
+      /**
+       * Classification reason codes for open/click events.
+       */
+      classificationReasons?: Array<string>;
+
       clickedUrl?: string | null;
 
       emailSendId?: string | null;
+
+      /**
+       * Engagement classification for open/click events.
+       */
+      engagementQuality?: 'human' | 'machine' | 'asset' | null;
 
       eventName?: string | null;
 
       eventTime?: string;
 
       eventType?: string;
+
+      /**
+       * Whether this open/click event is classified as bot/scanner activity.
+       */
+      machine?: boolean;
 
       properties?: { [key: string]: unknown } | null;
     }
@@ -354,6 +373,14 @@ export interface SubscriberCreateParams {
   tags?: Array<string>;
 }
 
+export interface SubscriberRetrieveParams {
+  /**
+   * Include detected scanner, preview, and tracked asset open/click events in
+   * subscriber email stats and recent activity.
+   */
+  includeMachineEngagement?: boolean;
+}
+
 export interface SubscriberUpdateParams {
   customAttributes?: { [key: string]: unknown };
 
@@ -443,6 +470,7 @@ export declare namespace Subscribers {
     type SubscriberListResponse as SubscriberListResponse,
     type SubscriberDeleteResponse as SubscriberDeleteResponse,
     type SubscriberCreateParams as SubscriberCreateParams,
+    type SubscriberRetrieveParams as SubscriberRetrieveParams,
     type SubscriberUpdateParams as SubscriberUpdateParams,
     type SubscriberListParams as SubscriberListParams,
   };
