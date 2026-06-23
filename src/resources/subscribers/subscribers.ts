@@ -382,7 +382,18 @@ export interface SubscriberRetrieveParams {
 }
 
 export interface SubscriberUpdateParams {
+  /**
+   * Custom attributes to update. Defaults to replacing the existing public
+   * custom-attribute map.
+   */
   customAttributes?: { [key: string]: unknown };
+
+  /**
+   * How to apply customAttributes. replace replaces the existing public
+   * custom-attribute map. merge overwrites only provided keys and retains
+   * unspecified existing keys.
+   */
+  customAttributesStrategy?: 'replace' | 'merge';
 
   /**
    * New delivery email. Fails with 409 if another subscriber owns it.
