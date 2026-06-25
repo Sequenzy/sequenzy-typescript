@@ -51,7 +51,9 @@ export class Transactional extends APIResource {
    * profile exists, replies are captured in Sequenzy but are not forwarded
    * externally. Variables can be passed to customize the email content. Nested
    * objects and arrays are supported for repeat blocks, such as `items`. Returns
-   * immediately with a job ID.
+   * immediately with a job ID. If a queued send references a required variable that
+   * is not provided and has no default, the worker records the send as failed during
+   * background rendering.
    *
    * @example
    * ```ts
@@ -205,7 +207,9 @@ export interface TransactionalSendParams {
    * scalars, nested objects, or arrays used by repeat blocks. Raw HTML templates can
    * use simple subscriber/custom-attribute conditionals such as
    * `{{#if subscriber.plan}}...{{else}}...{{/if}}` and
-   * `{{#unless subscriber.plan}}...{{/unless}}`.
+   * `{{#unless subscriber.plan}}...{{/unless}}`. Missing required variables are
+   * recorded as failed sends during background rendering after the request is
+   * accepted.
    */
   variables?: { [key: string]: unknown };
 }
