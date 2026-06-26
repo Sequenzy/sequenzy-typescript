@@ -51,9 +51,11 @@ export class Transactional extends APIResource {
    * profile exists, replies are captured in Sequenzy but are not forwarded
    * externally. Variables can be passed to customize the email content. Nested
    * objects and arrays are supported for repeat blocks, such as `items`. Returns
-   * immediately with a job ID. If a queued send references a required variable that
-   * is not provided and has no default, the worker records the send as failed during
-   * background rendering.
+   * immediately with a job ID. If Sequenzy detects likely missing or unused
+   * variables before queueing, the successful response includes a non-blocking
+   * `diagnostics` warning object. Missing values do not block queueing; if a queued
+   * send references a required variable that is not provided and has no default, the
+   * worker may record the send as failed during background rendering.
    *
    * @example
    * ```ts
@@ -97,6 +99,12 @@ export type TransactionalSendResponse =
 
 export namespace TransactionalSendResponse {
   export interface SlugBasedResponse {
+    /**
+     * Non-blocking warnings about likely template variable issues. The send is still
+     * queued when this object is present.
+     */
+    diagnostics?: SlugBasedResponse.Diagnostics;
+
     jobId?: string;
 
     success?: boolean;
@@ -107,6 +115,54 @@ export namespace TransactionalSendResponse {
   }
 
   export namespace SlugBasedResponse {
+    /**
+     * Non-blocking warnings about likely template variable issues. The send is still
+     * queued when this object is present.
+     */
+    export interface Diagnostics {
+      message: string;
+
+      missingRequiredVariables: Array<Diagnostics.MissingRequiredVariable>;
+
+      status: 'warning';
+
+      unusedVariables: Array<Diagnostics.UnusedVariable>;
+    }
+
+    export namespace Diagnostics {
+      export interface MissingRequiredVariable {
+        lookupName?: string;
+
+        message?: string;
+
+        name?: string;
+
+        suggestions?: Array<string>;
+
+        usedIn?: Array<MissingRequiredVariable.UsedIn>;
+      }
+
+      export namespace MissingRequiredVariable {
+        export interface UsedIn {
+          blockId?: string;
+
+          blockType?: string;
+
+          field?: string;
+
+          surface?: 'subject' | 'previewText' | 'body' | 'block';
+        }
+      }
+
+      export interface UnusedVariable {
+        message?: string;
+
+        name?: string;
+
+        suggestions?: Array<string>;
+      }
+    }
+
     export interface Transactional {
       id?: string;
 
@@ -117,11 +173,67 @@ export namespace TransactionalSendResponse {
   }
 
   export interface DirectContentResponse {
+    /**
+     * Non-blocking warnings about likely template variable issues. The send is still
+     * queued when this object is present.
+     */
+    diagnostics?: DirectContentResponse.Diagnostics;
+
     jobId?: string;
 
     success?: boolean;
 
     to?: string | Array<string>;
+  }
+
+  export namespace DirectContentResponse {
+    /**
+     * Non-blocking warnings about likely template variable issues. The send is still
+     * queued when this object is present.
+     */
+    export interface Diagnostics {
+      message: string;
+
+      missingRequiredVariables: Array<Diagnostics.MissingRequiredVariable>;
+
+      status: 'warning';
+
+      unusedVariables: Array<Diagnostics.UnusedVariable>;
+    }
+
+    export namespace Diagnostics {
+      export interface MissingRequiredVariable {
+        lookupName?: string;
+
+        message?: string;
+
+        name?: string;
+
+        suggestions?: Array<string>;
+
+        usedIn?: Array<MissingRequiredVariable.UsedIn>;
+      }
+
+      export namespace MissingRequiredVariable {
+        export interface UsedIn {
+          blockId?: string;
+
+          blockType?: string;
+
+          field?: string;
+
+          surface?: 'subject' | 'previewText' | 'body' | 'block';
+        }
+      }
+
+      export interface UnusedVariable {
+        message?: string;
+
+        name?: string;
+
+        suggestions?: Array<string>;
+      }
+    }
   }
 }
 
@@ -207,8 +319,9 @@ export interface TransactionalSendParams {
    * scalars, nested objects, or arrays used by repeat blocks. Raw HTML templates can
    * use simple subscriber/custom-attribute conditionals such as
    * `{{#if subscriber.plan}}...{{else}}...{{/if}}` and
-   * `{{#unless subscriber.plan}}...{{/unless}}`. Missing required variables are
-   * recorded as failed sends during background rendering after the request is
+   * `{{#unless subscriber.plan}}...{{/unless}}`. Likely variable issues are returned
+   * as non-blocking diagnostics when possible; missing required variables may still
+   * be recorded as failed sends during background rendering after the request is
    * accepted.
    */
   variables?: { [key: string]: unknown };
