@@ -43,8 +43,8 @@ export class Subscribers extends APIResource {
   }
 
   /**
-   * Retrieves a subscriber by their email address, including list memberships,
-   * sequence enrollments, email stats, and recent activity.
+   * Retrieves a subscriber by their email address, including notes, list
+   * memberships, sequence enrollments, email stats, and recent activity.
    *
    * @example
    * ```ts
@@ -188,6 +188,8 @@ export namespace SubscriberRetrieveResponse {
 
     lists?: Array<Subscriber.List>;
 
+    notes?: Array<Subscriber.Note>;
+
     sequenceEnrollments?: Array<Subscriber.SequenceEnrollment>;
   }
 
@@ -255,6 +257,34 @@ export namespace SubscriberRetrieveResponse {
       subscribedAt?: string;
 
       unsubscribedAt?: string | null;
+    }
+
+    export interface Note {
+      id?: string;
+
+      author?: Note.Author | null;
+
+      authorId?: string;
+
+      body?: string;
+
+      companyId?: string;
+
+      createdAt?: string;
+
+      subscriberId?: string;
+
+      updatedAt?: string;
+    }
+
+    export namespace Note {
+      export interface Author {
+        id?: string;
+
+        email?: string | null;
+
+        name?: string | null;
+      }
     }
 
     export interface SequenceEnrollment {
