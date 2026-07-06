@@ -74,6 +74,9 @@ describe('resource subscribers', () => {
     await expect(
       client.subscribers.list(
         {
+          attribute: 'attribute',
+          attributeOperator: 'is',
+          cursor: 'cursor',
           email: 'email',
           limit: 100,
           list: 'list',

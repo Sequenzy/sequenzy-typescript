@@ -80,8 +80,11 @@ export class Subscribers extends APIResource {
   }
 
   /**
-   * Lists subscribers with pagination and optional filtering by status, free-text
-   * query, tags, list, segment, or email.
+   * Lists subscribers with stable pagination and optional filtering by status,
+   * free-text query, tags, list, segment, attribute, or email. Non-attribute results
+   * are ordered by createdAt descending with subscriber ID as a deterministic
+   * tie-breaker. Attribute-filtered results use ClickHouse-first cursor pagination
+   * ordered by subscriber ID ascending and do not include a total count.
    *
    * @example
    * ```ts
@@ -448,6 +451,24 @@ export interface SubscriberUpdateParams {
 }
 
 export interface SubscriberListParams {
+  /**
+   * Custom attribute filter using attributeName:value syntax, such as plan:pro or
+   * mrr:50.
+   */
+  attribute?: string;
+
+  /**
+   * Attribute filter operator for direct cursor pagination. Use saved segments for
+   * exclusion operators such as is_not, not_contains, or is_empty.
+   */
+  attributeOperator?: 'is' | 'contains' | 'gt' | 'gte' | 'lt' | 'lte' | 'is_not_empty';
+
+  /**
+   * Opaque cursor returned as pagination.nextCursor. Only used with attribute
+   * filters.
+   */
+  cursor?: string;
+
   /**
    * Legacy alias for a partial email search
    */
