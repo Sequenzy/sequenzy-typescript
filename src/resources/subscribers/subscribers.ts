@@ -131,6 +131,16 @@ export interface Subscriber {
 
   lastName?: string | null;
 
+  /**
+   * Phone number in E.164 format
+   */
+  phone?: string | null;
+
+  /**
+   * SMS marketing consent status, independent of the email status
+   */
+  smsStatus?: 'not_subscribed' | 'pending' | 'subscribed' | 'unsubscribed';
+
   status?: 'active' | 'unsubscribed' | 'bounced';
 
   tags?: Array<string>;
@@ -399,6 +409,19 @@ export interface SubscriberCreateParams {
   optInMode?: 'default' | 'confirmed' | 'double_opt_in';
 
   /**
+   * Phone number in E.164 format or US national format. Stored normalized to E.164.
+   * Invalid values fail with a 400 validation error. Does not affect SMS consent.
+   */
+  phone?: string | null;
+
+  /**
+   * SMS marketing consent. true sets smsStatus to subscribed with consent source
+   * api, false sets unsubscribed, omitted leaves SMS status unchanged. Never
+   * inferred from phone presence.
+   */
+  smsConsent?: boolean;
+
+  /**
    * Initial subscriber status.
    */
   status?: 'active' | 'unsubscribed' | 'bounced';
@@ -441,6 +464,19 @@ export interface SubscriberUpdateParams {
   firstName?: string;
 
   lastName?: string;
+
+  /**
+   * Phone number in E.164 format or US national format. Stored normalized to E.164.
+   * Invalid values fail with a 400 validation error. Does not affect SMS consent.
+   */
+  phone?: string | null;
+
+  /**
+   * SMS marketing consent. true sets smsStatus to subscribed with consent source
+   * api, false sets unsubscribed, omitted leaves SMS status unchanged. Never
+   * inferred from phone presence.
+   */
+  smsConsent?: boolean;
 
   /**
    * Setting `unsubscribed` performs a full global unsubscribe.
