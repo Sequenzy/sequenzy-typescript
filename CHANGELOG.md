@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.29.1 (2026-07-11)
+
+Full Changelog: [v0.29.0...v0.29.1](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.29.0...v0.29.1)
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([33f65c0](https://github.com/Sequenzy/sequenzy-typescript/commit/33f65c0193946f7f4fa953e01f62a0f202c255cd))
+
 ## 0.29.0 (2026-07-10)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.28.0...v0.29.0)
