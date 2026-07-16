@@ -23,8 +23,13 @@ export class Transactional extends APIResource {
   /**
    * Queues a transactional email for sending. You can either:
    *
-   * - Provide a `slug` to use a saved template
-   * - Provide `subject` and `body` to send custom content directly
+   * - Provide a canonical `slug` (or compatibility alias `templateId`) to use a
+   *   saved template
+   * - Provide `subject` and canonical `body` (or compatibility alias `html`) to send
+   *   custom content directly
+   *
+   * If both a canonical field and its alias are provided, `slug` must match
+   * `templateId` and `body` must match `html`.
    *
    * **Recipients:**
    *
@@ -53,9 +58,9 @@ export class Transactional extends APIResource {
    * objects and arrays are supported for repeat blocks, such as `items`. Returns
    * immediately with a job ID. If Sequenzy detects likely missing or unused
    * variables before queueing, the successful response includes a non-blocking
-   * `diagnostics` warning object. Missing values do not block queueing; if a queued
-   * send references a required variable that is not provided and has no default, the
-   * worker may record the send as failed during background rendering.
+   * `diagnostics` warning object. Missing values do not block queueing or sending; a
+   * required variable that is not provided and has no default renders as an empty
+   * string.
    *
    * @example
    * ```ts
@@ -100,11 +105,20 @@ export type TransactionalSendResponse =
 export namespace TransactionalSendResponse {
   export interface SlugBasedResponse {
     /**
-     * Non-blocking warnings about likely template variable issues. The send is still
-     * queued when this object is present.
+     * Non-blocking warnings about template variable issues. The send is still queued
+     * when this object is present, and missing values without defaults render as empty
+     * strings.
      */
     diagnostics?: SlugBasedResponse.Diagnostics;
 
+    /**
+     * Durable email delivery ID. Use this with GET /email-sends/{emailSendId}.
+     */
+    emailSendId?: string;
+
+    /**
+     * @deprecated Legacy queue identifier retained for response compatibility.
+     */
     jobId?: string;
 
     success?: boolean;
@@ -116,8 +130,9 @@ export namespace TransactionalSendResponse {
 
   export namespace SlugBasedResponse {
     /**
-     * Non-blocking warnings about likely template variable issues. The send is still
-     * queued when this object is present.
+     * Non-blocking warnings about template variable issues. The send is still queued
+     * when this object is present, and missing values without defaults render as empty
+     * strings.
      */
     export interface Diagnostics {
       message: string;
@@ -174,11 +189,20 @@ export namespace TransactionalSendResponse {
 
   export interface DirectContentResponse {
     /**
-     * Non-blocking warnings about likely template variable issues. The send is still
-     * queued when this object is present.
+     * Non-blocking warnings about template variable issues. The send is still queued
+     * when this object is present, and missing values without defaults render as empty
+     * strings.
      */
     diagnostics?: DirectContentResponse.Diagnostics;
 
+    /**
+     * Durable email delivery ID. Use this with GET /email-sends/{emailSendId}.
+     */
+    emailSendId?: string;
+
+    /**
+     * @deprecated Legacy queue identifier retained for response compatibility.
+     */
     jobId?: string;
 
     success?: boolean;
@@ -188,8 +212,9 @@ export namespace TransactionalSendResponse {
 
   export namespace DirectContentResponse {
     /**
-     * Non-blocking warnings about likely template variable issues. The send is still
-     * queued when this object is present.
+     * Non-blocking warnings about template variable issues. The send is still queued
+     * when this object is present, and missing values without defaults render as empty
+     * strings.
      */
     export interface Diagnostics {
       message: string;
@@ -261,7 +286,7 @@ export interface TransactionalSendParams {
   bcc?: string | Array<string>;
 
   /**
-   * Email body HTML content (required if not using slug)
+   * Canonical email body HTML content (required if not using a template slug).
    */
   body?: string;
 
@@ -276,6 +301,12 @@ export interface TransactionalSendParams {
    * verified for your account. If not verified, this field is silently ignored.
    */
   from?: string;
+
+  /**
+   * Compatibility alias for `body`. Accepted with `subject` for direct sends and
+   * must match `body` when both are provided.
+   */
+  html?: string;
 
   /**
    * Preview text for the email (only used with direct content)
@@ -296,8 +327,8 @@ export interface TransactionalSendParams {
   replyTo?: string;
 
   /**
-   * Slug of the transactional email template to use (mutually exclusive with
-   * subject/body)
+   * Canonical slug of the transactional email template to use (mutually exclusive
+   * with direct content).
    */
   slug?: string;
 
@@ -315,14 +346,20 @@ export interface TransactionalSendParams {
   subscriberExternalId?: string;
 
   /**
+   * Compatibility alias for `slug`. Despite the field name, pass the saved
+   * transactional email API slug, not its database ID. Must match `slug` when both
+   * are provided.
+   */
+  templateId?: string;
+
+  /**
    * Variables for template replacement (works with both modes). Values can be
    * scalars, nested objects, or arrays used by repeat blocks. Raw HTML templates can
    * use simple subscriber/custom-attribute conditionals such as
    * `{{#if subscriber.plan}}...{{else}}...{{/if}}` and
    * `{{#unless subscriber.plan}}...{{/unless}}`. Likely variable issues are returned
-   * as non-blocking diagnostics when possible; missing required variables may still
-   * be recorded as failed sends during background rendering after the request is
-   * accepted.
+   * as non-blocking diagnostics when possible; missing required variables without
+   * defaults render as empty strings and do not block sending.
    */
   variables?: { [key: string]: unknown };
 }

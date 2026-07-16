@@ -48,11 +48,13 @@ describe('resource transactional', () => {
       body: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
       cc: 'manager@example.com',
       from: 'Notifications <notifications@example.com>',
+      html: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
       preview: 'Welcome to our platform',
       replyTo: 'Support <support@example.com>',
       slug: 'welcome-email',
       subject: 'Welcome to our platform!',
       subscriberExternalId: 'user_123',
+      templateId: 'welcome-email',
       variables: { NAME: 'bar' },
     });
   });
