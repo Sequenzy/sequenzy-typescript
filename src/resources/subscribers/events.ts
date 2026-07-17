@@ -61,6 +61,13 @@ export interface EventTriggerResponse {
    */
   optIn?: EventTriggerResponse.OptIn;
 
+  /**
+   * Present when the event was recorded but one or more side-effect stages (e.g.
+   * apply-sync-rules, trigger-event-automations) failed. Retry-sensitive callers
+   * should treat these as partial failures.
+   */
+  sideEffectFailures?: Array<string>;
+
   subscriber?: EventTriggerResponse.Subscriber;
 
   success?: boolean;
@@ -123,6 +130,12 @@ export namespace EventTriggerMultipleResponse {
     definitionCreated?: boolean;
 
     name?: string;
+
+    /**
+     * Present when this event was recorded but one or more side-effect stages (e.g.
+     * apply-sync-rules, trigger-event-automations) failed.
+     */
+    sideEffectFailures?: Array<string>;
   }
 
   /**
