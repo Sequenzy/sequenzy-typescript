@@ -263,6 +263,12 @@ export namespace SubscriberRetrieveResponse {
 
       description?: string | null;
 
+      /**
+       * Whether the list is private. Private lists are omitted from the hosted
+       * subscriber email preferences/unsubscribe page and cannot be subscribed to or
+       * unsubscribed from individually there. List privacy does not override a
+       * subscriber's global unsubscribe.
+       */
       isPrivate?: boolean | null;
 
       name?: string;
