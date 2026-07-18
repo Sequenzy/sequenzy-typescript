@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.32.0 (2026-07-18)
+
+Full Changelog: [v0.31.0...v0.32.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.31.0...v0.32.0)
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([c2f5eeb](https://github.com/Sequenzy/sequenzy-typescript/commit/c2f5eeb644d94dd431df2bb4e8865b9d2f072f18))
+
 ## 0.31.0 (2026-07-17)
 
 Full Changelog: [v0.30.0...v0.31.0](https://github.com/Sequenzy/sequenzy-typescript/compare/v0.30.0...v0.31.0)
