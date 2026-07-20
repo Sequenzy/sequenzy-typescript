@@ -47,6 +47,7 @@ describe('resource transactional', () => {
       bcc: 'archive@example.com',
       body: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
       cc: 'manager@example.com',
+      emailType: 'marketing',
       from: 'Notifications <notifications@example.com>',
       html: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
       preview: 'Welcome to our platform',
