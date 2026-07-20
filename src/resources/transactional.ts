@@ -64,12 +64,15 @@ export class Transactional extends APIResource {
    * profile, then falls back to the first reply profile in the company. If no reply
    * profile exists, replies are captured in Sequenzy but are not forwarded
    * externally. Variables can be passed to customize the email content. Nested
-   * objects and arrays are supported for repeat blocks, such as `items`. Returns
-   * immediately with a job ID. If Sequenzy detects likely missing or unused
-   * variables before queueing, the successful response includes a non-blocking
-   * `diagnostics` warning object. Missing values do not block queueing or sending; a
-   * required variable that is not provided and has no default renders as an empty
-   * string.
+   * objects and arrays are supported for repeat blocks, such as `items`. For a
+   * single recipient, Sequenzy matches an existing subscriber by
+   * `subscriberExternalId` or email and backfills stored first and last names when
+   * the corresponding request variables are omitted; explicit variables take
+   * precedence. Returns immediately with a job ID. If Sequenzy detects likely
+   * missing or unused variables before queueing, the successful response includes a
+   * non-blocking `diagnostics` warning object. Missing values do not block queueing
+   * or sending; a required variable that is not provided and has no default renders
+   * as an empty string.
    *
    * @example
    * ```ts
@@ -370,8 +373,10 @@ export interface TransactionalSendParams {
 
   /**
    * Variables for template replacement (works with both modes). Values can be
-   * scalars, nested objects, or arrays used by repeat blocks. Raw HTML templates can
-   * use simple subscriber/custom-attribute conditionals such as
+   * scalars, nested objects, or arrays used by repeat blocks. For a single
+   * recipient, stored subscriber first and last names fill missing name variables;
+   * explicit request variables take precedence. Raw HTML templates can use simple
+   * subscriber/custom-attribute conditionals such as
    * `{{#if subscriber.plan}}...{{else}}...{{/if}}` and
    * `{{#unless subscriber.plan}}...{{/unless}}`. Likely variable issues are returned
    * as non-blocking diagnostics when possible; missing required variables without
