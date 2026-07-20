@@ -21,7 +21,14 @@ export class Transactional extends APIResource {
   }
 
   /**
-   * Queues a transactional email for sending. You can either:
+   * Queues an email for sending. The default `emailType` is `transactional`. Set it
+   * to `marketing` for a consented single-recipient lifecycle or promotional
+   * message. Marketing mode creates or links a minimal subscriber, honors
+   * unsubscribe suppression, adds the standard marketing footer, and emits RFC 8058
+   * one-click-unsubscribe headers. The caller remains responsible for having consent
+   * or another lawful basis.
+   *
+   * You can either:
    *
    * - Provide a canonical `slug` (or compatibility alias `templateId`) to use a
    *   saved template
@@ -35,6 +42,8 @@ export class Transactional extends APIResource {
    *
    * - `to` can be a single email or an array of up to 50 emails
    * - Duplicate emails are automatically deduplicated
+   * - Marketing mode requires exactly one `to` recipient and does not support `cc`
+   *   or `bcc`
    *
    * **Attachments:**
    *
@@ -295,6 +304,13 @@ export interface TransactionalSendParams {
    * `to` are removed.
    */
   cc?: string | Array<string>;
+
+  /**
+   * Delivery policy. Marketing mode requires one recipient, creates or links a
+   * minimal subscriber, honors unsubscribe suppression, adds the standard footer,
+   * and emits RFC 8058 List-Unsubscribe and List-Unsubscribe-Post headers.
+   */
+  emailType?: 'transactional' | 'marketing';
 
   /**
    * Custom from address. Format: "Name <email>" or just "email". The domain must be
