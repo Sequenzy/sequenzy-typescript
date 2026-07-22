@@ -18,6 +18,7 @@ export {
   type TransactionalEmail,
   type TransactionalListResponse,
   type TransactionalSendResponse,
+  type TransactionalListParams,
   type TransactionalSendParams,
 } from './transactional';
 export { Widgets } from './widgets/widgets';

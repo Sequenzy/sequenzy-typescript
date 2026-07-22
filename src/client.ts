@@ -20,6 +20,7 @@ import { APIPromise } from './core/api-promise';
 import {
   Transactional,
   TransactionalEmail,
+  TransactionalListParams,
   TransactionalListResponse,
   TransactionalSendParams,
   TransactionalSendResponse,
@@ -795,6 +796,7 @@ export declare namespace Sequenzy {
     type TransactionalEmail as TransactionalEmail,
     type TransactionalListResponse as TransactionalListResponse,
     type TransactionalSendResponse as TransactionalSendResponse,
+    type TransactionalListParams as TransactionalListParams,
     type TransactionalSendParams as TransactionalSendParams,
   };
 
