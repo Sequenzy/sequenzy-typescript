@@ -21,6 +21,23 @@ describe('resource transactional', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.transactional.list(
+        {
+          includeMachineEngagement: true,
+          order: 'asc',
+          search: 'search',
+          sort: 'date',
+          status: 'all',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Sequenzy.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('send: only required params', async () => {
     const responsePromise = client.transactional.send({ to: 'recipient@example.com' });
     const rawResponse = await responsePromise.asResponse();
