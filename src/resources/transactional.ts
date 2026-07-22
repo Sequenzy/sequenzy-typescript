@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as TransactionalAPI from './transactional';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -9,15 +10,20 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Transactional extends APIResource {
   /**
-   * Lists all transactional email templates for your company.
+   * Lists transactional email templates with their linked subjects and all-time
+   * delivery metrics. Search name, slug, or subject; filter active state; and sort
+   * by engagement. Human engagement is used by default.
    *
    * @example
    * ```ts
    * const transactionals = await client.transactional.list();
    * ```
    */
-  list(options?: RequestOptions): APIPromise<TransactionalListResponse> {
-    return this._client.get('/transactional', options);
+  list(
+    query: TransactionalListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TransactionalListResponse> {
+    return this._client.get('/transactional', { query, ...options });
   }
 
   /**
@@ -58,21 +64,23 @@ export class Transactional extends APIResource {
    *
    * Optionally set `from` (domain must be verified) and `replyTo` addresses. When
    * reply tracking is enabled, Sequenzy uses a unique trackable `Reply-To` header
-   * and treats the provided `replyTo` as the forwarding destination for captured
-   * replies. For direct-content sends with reply tracking and reply forwarding
-   * enabled, omitting `replyTo` forwards replies to the company's default reply
-   * profile, then falls back to the first reply profile in the company. If no reply
-   * profile exists, replies are captured in Sequenzy but are not forwarded
-   * externally. Variables can be passed to customize the email content. Nested
-   * objects and arrays are supported for repeat blocks, such as `items`. For a
+   * and treats the resolved reply destination as the forwarding destination for
+   * captured replies. When `replyTo` is omitted, direct-content sends inherit the
+   * company's default reply profile and saved-template sends prefer the template
+   * reply profile before the company default. Both fall back to the first company
+   * reply profile. The resolved destination is retained whether or not reply
+   * tracking is enabled; it is sent as the Reply-To header only when reply tracking
+   * is disabled. Variables can be passed to customize the email content. Nested
+   * objects and arrays are supported for repeat blocks, such as `items`.
+   * `{{viewInBrowserUrl}}` is generated automatically for a hosted copy link. For a
    * single recipient, Sequenzy matches an existing subscriber by
    * `subscriberExternalId` or email and backfills stored first and last names when
    * the corresponding request variables are omitted; explicit variables take
-   * precedence. Returns immediately with a job ID. If Sequenzy detects likely
-   * missing or unused variables before queueing, the successful response includes a
-   * non-blocking `diagnostics` warning object. Missing values do not block queueing
-   * or sending; a required variable that is not provided and has no default renders
-   * as an empty string.
+   * precedence. Returns immediately with a durable `emailSendId` and the accepted
+   * `emailType`. If Sequenzy detects likely missing or unused variables before
+   * queueing, the successful response includes a non-blocking `diagnostics` warning
+   * object. Missing values do not block queueing or sending; a required variable
+   * that is not provided and has no default renders as an empty string.
    *
    * @example
    * ```ts
@@ -107,7 +115,33 @@ export interface TransactionalEmail {
 export interface TransactionalListResponse {
   success?: boolean;
 
-  transactional?: Array<TransactionalEmail>;
+  transactional?: Array<TransactionalListResponse.Transactional>;
+}
+
+export namespace TransactionalListResponse {
+  export interface Transactional extends TransactionalAPI.TransactionalEmail {
+    stats?: Transactional.Stats;
+
+    subject?: string | null;
+  }
+
+  export namespace Transactional {
+    export interface Stats {
+      bounces?: number;
+
+      clickRate?: number;
+
+      clicks?: number;
+
+      deliveries?: number;
+
+      openRate?: number;
+
+      opens?: number;
+
+      sends?: number;
+    }
+  }
 }
 
 export type TransactionalSendResponse =
@@ -127,6 +161,11 @@ export namespace TransactionalSendResponse {
      * Durable email delivery ID. Use this with GET /email-sends/{emailSendId}.
      */
     emailSendId?: string;
+
+    /**
+     * Delivery policy accepted for the queued email.
+     */
+    emailType?: 'marketing' | 'transactional';
 
     /**
      * @deprecated Legacy queue identifier retained for response compatibility.
@@ -213,6 +252,11 @@ export namespace TransactionalSendResponse {
     emailSendId?: string;
 
     /**
+     * Delivery policy accepted for the queued email.
+     */
+    emailType?: 'marketing' | 'transactional';
+
+    /**
      * @deprecated Legacy queue identifier retained for response compatibility.
      */
     jobId?: string;
@@ -272,6 +316,35 @@ export namespace TransactionalSendResponse {
       }
     }
   }
+}
+
+export interface TransactionalListParams {
+  /**
+   * Include detected bot, scanner, preview, and privacy-proxy engagement in open and
+   * click metrics.
+   */
+  includeMachineEngagement?: boolean;
+
+  /**
+   * Sort direction.
+   */
+  order?: 'asc' | 'desc';
+
+  /**
+   * Case-insensitive search across template name, API slug, and linked email
+   * subject/title.
+   */
+  search?: string;
+
+  /**
+   * Sort by creation date or all-time engagement metrics.
+   */
+  sort?: 'date' | 'sends' | 'opens' | 'open-rate' | 'clicks' | 'ctr';
+
+  /**
+   * Filter by template active state.
+   */
+  status?: 'all' | 'active' | 'disabled';
 }
 
 export interface TransactionalSendParams {
@@ -337,11 +410,11 @@ export interface TransactionalSendParams {
    * address. When reply tracking is disabled, this value is sent as the email's
    * `Reply-To` header. When reply tracking is enabled, Sequenzy sends a unique
    * trackable `Reply-To` header and stores this value as the forwarding destination
-   * for replies. For direct-content sends with reply tracking and reply forwarding
-   * enabled, omitting this field forwards replies to the company's default reply
-   * profile, then falls back to the first reply profile in the company. If no reply
-   * profile exists, replies are captured in Sequenzy but are not forwarded
-   * externally.
+   * for replies. When omitted, direct-content sends inherit the company default and
+   * saved-template sends prefer the template reply profile before the company
+   * default. Both fall back to the first company reply profile. The resolved
+   * destination is retained whether or not reply tracking is enabled; it is sent
+   * directly only when reply tracking is disabled.
    */
   replyTo?: string;
 
@@ -414,6 +487,7 @@ export declare namespace Transactional {
     type TransactionalEmail as TransactionalEmail,
     type TransactionalListResponse as TransactionalListResponse,
     type TransactionalSendResponse as TransactionalSendResponse,
+    type TransactionalListParams as TransactionalListParams,
     type TransactionalSendParams as TransactionalSendParams,
   };
 }
