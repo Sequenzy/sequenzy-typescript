@@ -73,6 +73,7 @@ describe('resource transactional', () => {
       subject: 'Welcome to our platform!',
       subscriberExternalId: 'user_123',
       templateId: 'welcome-email',
+      trackingSettings: { clickTracking: false, openTracking: true },
       variables: { NAME: 'bar' },
     });
   });

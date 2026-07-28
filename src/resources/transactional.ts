@@ -445,6 +445,14 @@ export interface TransactionalSendParams {
   templateId?: string;
 
   /**
+   * Per-send tracking opt-outs. Each field defaults to `true`, meaning your
+   * account's tracking settings apply; set a field to `false` to disable that
+   * tracking for this send only. These fields can only opt out; they cannot enable
+   * tracking that is disabled for your account.
+   */
+  trackingSettings?: TransactionalSendParams.TrackingSettings;
+
+  /**
    * Variables for template replacement (works with both modes). Values can be
    * scalars, nested objects, or arrays used by repeat blocks. For a single
    * recipient, stored subscriber first and last names fill missing name variables;
@@ -479,6 +487,26 @@ export namespace TransactionalSendParams {
      * URL to fetch the file from (mutually exclusive with content)
      */
     path?: string;
+  }
+
+  /**
+   * Per-send tracking opt-outs. Each field defaults to `true`, meaning your
+   * account's tracking settings apply; set a field to `false` to disable that
+   * tracking for this send only. These fields can only opt out; they cannot enable
+   * tracking that is disabled for your account.
+   */
+  export interface TrackingSettings {
+    /**
+     * Set `false` to skip link rewriting so the original URLs are delivered unchanged.
+     * Useful when the click-tracking redirect domain breaks iOS/Android universal
+     * links or deep links in transactional emails.
+     */
+    clickTracking?: boolean;
+
+    /**
+     * Set `false` to skip the open-tracking pixel for this send only.
+     */
+    openTracking?: boolean;
   }
 }
 
