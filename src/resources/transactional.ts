@@ -459,8 +459,12 @@ export interface TransactionalSendParams {
    * explicit request variables take precedence. Raw HTML templates can use simple
    * subscriber/custom-attribute conditionals such as
    * `{{#if subscriber.plan}}...{{else}}...{{/if}}` and
-   * `{{#unless subscriber.plan}}...{{/unless}}`. Likely variable issues are returned
-   * as non-blocking diagnostics when possible; missing required variables without
+   * `{{#unless subscriber.plan}}...{{/unless}}`. Variables are always HTML-escaped;
+   * a template can prefix a tag with `html.` (`{{html.prerenderedHtml}}`) to insert
+   * a trusted HTML value unescaped. Injected HTML is sanitized (scripts, event
+   * handlers, and dangerous URLs are stripped), only applies in HTML text position,
+   * and must not contain end-user input. Likely variable issues are returned as
+   * non-blocking diagnostics when possible; missing required variables without
    * defaults render as empty strings and do not block sending.
    */
   variables?: { [key: string]: unknown };
