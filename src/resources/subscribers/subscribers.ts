@@ -365,6 +365,15 @@ export interface SubscriberDeleteResponse {
 }
 
 export interface SubscriberCreateParams {
+  /**
+   * Original signup date, for importing history from another platform. Preserves the
+   * real date so date-relative segments are correct immediately. An existing
+   * contact's date only ever moves earlier, regardless of duplicateStrategy.
+   * Supplying this defaults enrollInSequences to false, and updatedAt is never
+   * backdated.
+   */
+  createdAt?: string;
+
   customAttributes?: { [key: string]: unknown };
 
   /**
@@ -384,7 +393,7 @@ export interface SubscriberCreateParams {
 
   /**
    * Whether to enroll the subscriber in matching sequences. Defaults to true for API
-   * calls.
+   * calls, or to false when createdAt is supplied.
    */
   enrollInSequences?: boolean;
 

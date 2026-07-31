@@ -173,6 +173,12 @@ export interface EventTriggerParams {
   email?: string;
 
   /**
+   * Caller-owned event ID. Re-sending the same ID for a historical event writes
+   * nothing new, so an interrupted import is safe to re-run.
+   */
+  eventId?: string;
+
+  /**
    * Customer-owned app/customer/user ID
    */
   externalId?: string;
@@ -186,6 +192,15 @@ export interface EventTriggerParams {
    * Last name to set if creating the subscriber.
    */
   lastName?: string;
+
+  /**
+   * When the event actually happened. Defaults to now. More than an hour in the past
+   * records it as history - stored with the real timestamp and counted by segments,
+   * but running no sequences, sync rules, waiting steps, goal conversions or
+   * webhooks, and the response carries historical=true. Older than the 5-year event
+   * retention window is rejected with 400.
+   */
+  occurredAt?: string;
 
   /**
    * Event properties/metadata
@@ -223,6 +238,19 @@ export interface EventTriggerMultipleParams {
 export namespace EventTriggerMultipleParams {
   export interface Event {
     name: string;
+
+    /**
+     * Caller-owned event ID that makes a re-run idempotent.
+     */
+    eventId?: string;
+
+    /**
+     * When this event actually happened. Defaults to now. When every event in the
+     * batch is more than an hour old the batch is imported as history in one
+     * idempotent write, running no sequences, sync rules, waiting steps, goal
+     * conversions or webhooks.
+     */
+    occurredAt?: string;
 
     properties?: { [key: string]: unknown };
   }
