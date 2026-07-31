@@ -26,9 +26,11 @@ describe('resource events', () => {
       event: 'purchase.completed',
       customAttributes: { foo: 'bar' },
       email: 'user@example.com',
+      eventId: 'inv_9182',
       externalId: 'user_123',
       firstName: 'John',
       lastName: 'Doe',
+      occurredAt: '2024-11-02T10:00:00Z',
       properties: {
         amount: 'bar',
         currency: 'bar',
@@ -55,6 +57,8 @@ describe('resource events', () => {
       events: [
         {
           name: 'page.viewed',
+          eventId: 'inv_9182',
+          occurredAt: '2024-11-02T10:00:00Z',
           properties: { page: 'bar' },
         },
       ],
