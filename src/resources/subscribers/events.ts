@@ -104,7 +104,10 @@ export namespace EventTriggerResponse {
 
     created?: boolean;
 
-    email?: string;
+    /**
+     * Null for phone-only (SMS) contacts.
+     */
+    email?: string | null;
   }
 }
 
@@ -154,7 +157,10 @@ export namespace EventTriggerMultipleResponse {
 
     created?: boolean;
 
-    email?: string;
+    /**
+     * Null for phone-only (SMS) contacts.
+     */
+    email?: string | null;
   }
 }
 
