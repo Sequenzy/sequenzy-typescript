@@ -118,7 +118,11 @@ export interface Subscriber {
 
   customAttributes?: { [key: string]: unknown };
 
-  email?: string;
+  /**
+   * Null for phone-only (SMS) contacts, which are identified by their phone number
+   * instead.
+   */
+  email?: string | null;
 
   emailProvider?: string | null;
 
@@ -386,7 +390,8 @@ export interface SubscriberCreateParams {
   duplicateStrategy?: 'skip' | 'merge' | 'overwrite';
 
   /**
-   * Required when creating a new subscriber. Optional when externalId identifies an
+   * Required when creating a new subscriber unless a phone is provided (which
+   * creates a phone-only SMS contact). Optional when externalId identifies an
    * existing subscriber.
    */
   email?: string;
@@ -426,6 +431,7 @@ export interface SubscriberCreateParams {
   /**
    * Phone number in E.164 format or US national format. Stored normalized to E.164.
    * Invalid values fail with a 400 validation error. Does not affect SMS consent.
+   * With no email or externalId, creates or matches a phone-only (SMS) contact.
    */
   phone?: string | null;
 
@@ -483,6 +489,8 @@ export interface SubscriberUpdateParams {
   /**
    * Phone number in E.164 format or US national format. Stored normalized to E.164.
    * Invalid values fail with a 400 validation error. Does not affect SMS consent.
+   * null or "" clears the phone, except on a phone-only (SMS) contact, where
+   * clearing its only identity fails with a 400 validation error.
    */
   phone?: string | null;
 
