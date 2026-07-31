@@ -80,7 +80,10 @@ export namespace TagAddResponse {
      */
     created?: boolean;
 
-    email?: string;
+    /**
+     * Null for phone-only (SMS) contacts.
+     */
+    email?: string | null;
 
     tags?: Array<string>;
   }
@@ -129,7 +132,10 @@ export namespace TagAddMultipleResponse {
 
     created?: boolean;
 
-    email?: string;
+    /**
+     * Null for phone-only (SMS) contacts.
+     */
+    email?: string | null;
 
     tags?: Array<string>;
   }
