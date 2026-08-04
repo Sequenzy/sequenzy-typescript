@@ -86,6 +86,15 @@ export class Subscribers extends APIResource {
    * tie-breaker. Attribute-filtered results use ClickHouse-first cursor pagination
    * ordered by subscriber ID ascending and do not include a total count.
    *
+   * **Pulling a full audience:** every response includes `pagination.nextCursor` and
+   * `pagination.hasMore`. Follow `nextCursor` rather than incrementing `page`.
+   * Cursor pagination keeps results stable while subscribers are being created or
+   * deleted mid-pull (page numbers can skip or repeat rows as the underlying set
+   * shifts) and skips the total-count query, so `pagination.total` and
+   * `pagination.totalPages` are `null` on cursor requests. Combined with
+   * `limit=1000`, a 10,000-subscriber export takes ten requests instead of a
+   * hundred.
+   *
    * @example
    * ```ts
    * const subscribers = await client.subscribers.list();
@@ -236,6 +245,12 @@ export namespace SubscriberRetrieveResponse {
 
       eventTime?: string;
 
+      /**
+       * Email event type (send, delivery, open, click, bounce, complaint, unsubscribe,
+       * delivery_delay), "custom" for subscriber events, or an SMS event type (sms_sent,
+       * sms_delivered, sms_failed, sms_clicked, sms_opted_out). New types may be added
+       * over time.
+       */
       eventType?: string;
 
       /**
@@ -244,6 +259,22 @@ export namespace SubscriberRetrieveResponse {
       machine?: boolean;
 
       properties?: { [key: string]: unknown } | null;
+
+      /**
+       * Carrier or provider error code. Present only on sms_failed events.
+       */
+      smsErrorCode?: string | null;
+
+      /**
+       * Number of SMS segments the message was split into. Present only on sms\_\*
+       * events.
+       */
+      smsSegments?: number | null;
+
+      /**
+       * SMS send this event belongs to. Present only on sms\_\* events.
+       */
+      smsSendId?: string | null;
     }
 
     export interface EmailStats {
@@ -343,6 +374,10 @@ export interface SubscriberUpdateResponse {
 }
 
 export interface SubscriberListResponse {
+  /**
+   * Pagination for the subscriber list endpoint. `total` and `totalPages` are null
+   * on cursor requests because the count query is skipped.
+   */
   pagination?: SubscriberListResponse.Pagination;
 
   subscribers?: Array<Subscriber>;
@@ -351,14 +386,31 @@ export interface SubscriberListResponse {
 }
 
 export namespace SubscriberListResponse {
+  /**
+   * Pagination for the subscriber list endpoint. `total` and `totalPages` are null
+   * on cursor requests because the count query is skipped.
+   */
   export interface Pagination {
+    hasMore?: boolean;
+
     limit?: number;
+
+    /**
+     * Pass back as `cursor` to fetch the next page. Null when there are no further
+     * results.
+     */
+    nextCursor?: string | null;
+
+    /**
+     * Sort key the cursor walks.
+     */
+    orderBy?: string;
 
     page?: number;
 
-    total?: number;
+    total?: number | null;
 
-    totalPages?: number;
+    totalPages?: number | null;
   }
 }
 
@@ -429,11 +481,18 @@ export interface SubscriberCreateParams {
   optInMode?: 'default' | 'confirmed' | 'double_opt_in';
 
   /**
-   * Phone number in E.164 format or US national format. Stored normalized to E.164.
+   * Phone number in E.164 format or national format. Stored normalized to E.164.
    * Invalid values fail with a 400 validation error. Does not affect SMS consent.
    * With no email or externalId, creates or matches a phone-only (SMS) contact.
    */
   phone?: string | null;
+
+  /**
+   * ISO 3166-1 alpha-2 country used to read a national-format phone, defaulting to
+   * US. A parsing hint only - the stored phoneCountry always comes from the parsed
+   * number. Sending it without phone fails with a 400 validation error.
+   */
+  phoneCountry?: string | null;
 
   /**
    * SMS marketing consent. true sets smsStatus to subscribed with consent source
@@ -487,12 +546,20 @@ export interface SubscriberUpdateParams {
   lastName?: string;
 
   /**
-   * Phone number in E.164 format or US national format. Stored normalized to E.164.
+   * Phone number in E.164 format or national format. Stored normalized to E.164.
    * Invalid values fail with a 400 validation error. Does not affect SMS consent.
+   * Changing it resets SMS consent unless smsConsent is sent in the same request.
    * null or "" clears the phone, except on a phone-only (SMS) contact, where
    * clearing its only identity fails with a 400 validation error.
    */
   phone?: string | null;
+
+  /**
+   * ISO 3166-1 alpha-2 country used to read a national-format phone, defaulting to
+   * US. A parsing hint only - the stored phoneCountry always comes from the parsed
+   * number. Sending it without phone fails with a 400 validation error.
+   */
+  phoneCountry?: string | null;
 
   /**
    * SMS marketing consent. true sets smsStatus to subscribed with consent source
@@ -523,8 +590,9 @@ export interface SubscriberListParams {
   attributeOperator?: 'is' | 'contains' | 'gt' | 'gte' | 'lt' | 'lte' | 'is_not_empty';
 
   /**
-   * Opaque cursor returned as pagination.nextCursor. Only used with attribute
-   * filters.
+   * Opaque cursor returned as pagination.nextCursor. Cannot be combined with `page`.
+   * Attribute-filtered requests return their own cursor, which is not
+   * interchangeable with the default-ordering cursor.
    */
   cursor?: string;
 
@@ -534,7 +602,13 @@ export interface SubscriberListParams {
   email?: string;
 
   /**
-   * Number of items per page (max 100)
+   * Pass `false` to skip the total-count query on page-numbered requests. Cursor
+   * requests always skip it.
+   */
+  includeTotal?: 'false';
+
+  /**
+   * Number of items per page (max 1000)
    */
   limit?: number;
 
@@ -554,7 +628,7 @@ export interface SubscriberListParams {
   listName?: string;
 
   /**
-   * Page number
+   * Page number. Cannot be combined with `cursor`.
    */
   page?: number;
 
