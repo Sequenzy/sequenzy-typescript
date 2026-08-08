@@ -120,6 +120,16 @@ export interface TransactionalListResponse {
 
 export namespace TransactionalListResponse {
   export interface Transactional extends TransactionalAPI.TransactionalEmail {
+    /**
+     * Per-email Style > Format, derived from the stored blocks. `branded` renders the
+     * company logo and the full footer; `minimal` renders no logo and the simple
+     * footer. Null when the entire email is a single raw HTML block, which has no
+     * Sequenzy format. Sequence steps, campaigns, transactional templates, and saved
+     * templates all report this field, so chrome can be compared across emails without
+     * rendering them.
+     */
+    emailPreset?: 'branded' | 'minimal' | null;
+
     stats?: Transactional.Stats;
 
     subject?: string | null;
