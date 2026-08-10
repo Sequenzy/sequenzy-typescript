@@ -158,6 +158,15 @@ export interface Subscriber {
 
   tags?: Array<string>;
 
+  /**
+   * When the contact opted out, derived from the list memberships the opt-out
+   * deactivated. Use this rather than `updatedAt` to date an opt-out - any later tag
+   * or attribute write moves `updatedAt`. Null unless the contact is currently
+   * unsubscribed, so leaving a single list does not set it, and null for contacts
+   * imported as already unsubscribed, where no date exists.
+   */
+  unsubscribedAt?: string | null;
+
   updatedAt?: string;
 }
 
@@ -651,6 +660,20 @@ export interface SubscriberListParams {
    * Comma-separated tag names. Subscribers must have all provided tags.
    */
   tags?: string;
+
+  /**
+   * Only return contacts whose `unsubscribedAt` is on or after this ISO 8601 date or
+   * datetime. Bare dates use UTC midnight; datetimes must include `Z` or an explicit
+   * offset. Contacts with no recorded opt-out date are excluded.
+   */
+  unsubscribedAfter?: string;
+
+  /**
+   * Only return contacts whose `unsubscribedAt` is on or before this ISO 8601 date
+   * or datetime. Bare dates use UTC midnight; datetimes must include `Z` or an
+   * explicit offset. Combine with `unsubscribedAfter` to audit a window of opt-outs.
+   */
+  unsubscribedBefore?: string;
 }
 
 Subscribers.Tags = Tags;

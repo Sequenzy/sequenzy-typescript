@@ -88,6 +88,8 @@ describe('resource subscribers', () => {
           segmentId: 'segmentId',
           status: 'active',
           tags: 'tags',
+          unsubscribedAfter: 'unsubscribedAfter',
+          unsubscribedBefore: 'unsubscribedBefore',
         },
         { path: '/_stainless_unknown_path' },
       ),
