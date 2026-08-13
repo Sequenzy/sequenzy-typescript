@@ -54,8 +54,10 @@ export class Transactional extends APIResource {
    * **Attachments:**
    *
    * - Attachments can be provided as Base64-encoded content or URLs
-   * - Maximum total attachment size: 40MB per email
+   * - Maximum 10 attachments and 7MB total per email
    * - Any file type supported (PDFs, images, documents, etc.)
+   * - Set `contentId` on an attachment to embed it as an inline image referenced
+   *   from the HTML as `<img src="cid:VALUE">`
    *
    * A successful response means the email was accepted for background processing.
    * Transactional emails are not blocked by subscriber unsubscribe or double opt-in
@@ -370,7 +372,10 @@ export interface TransactionalSendParams {
    * - `content`: Base64-encoded file content
    * - `path`: URL to fetch the file from
    *
-   * Maximum total size: 40MB per email.
+   * Set `contentId` to embed the file as an inline image the HTML references with
+   * `<img src="cid:VALUE">` instead of attaching it.
+   *
+   * Maximum 10 attachments and 7MB total per email.
    */
   attachments?: Array<TransactionalSendParams.Attachment>;
 
@@ -493,7 +498,17 @@ export namespace TransactionalSendParams {
     content?: string;
 
     /**
-     * MIME type of the attachment (optional, auto-detected if not provided)
+     * Content-ID that embeds the file as an inline image instead of attaching it.
+     * Reference it from the HTML body as `<img src="cid:VALUE">`; the message is then
+     * sent as multipart/related, which is the only embedded-image form Gmail renders.
+     * If nothing in the HTML references the value, the file is sent as a normal
+     * attachment.
+     */
+    contentId?: string;
+
+    /**
+     * MIME type of the attachment (optional, auto-detected from the filename if not
+     * provided)
      */
     contentType?: string;
 
