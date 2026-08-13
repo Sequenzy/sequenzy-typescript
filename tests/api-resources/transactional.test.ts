@@ -57,6 +57,7 @@ describe('resource transactional', () => {
         {
           filename: 'invoice.pdf',
           content: 'JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC...',
+          contentId: 'ticket-qr',
           contentType: 'application/pdf',
           path: 'https://example.com/invoices/123.pdf',
         },
