@@ -52,7 +52,34 @@ export class Events extends APIResource {
 }
 
 export interface EventTriggerResponse {
+  /**
+   * Present and true when a live event's supplied eventId was already recorded for
+   * this contact and event name. Nothing was written and no side effects ran; event
+   * holds the existing event. Historical responses use duplicates instead.
+   */
+  duplicate?: boolean;
+
+  /**
+   * Historical event rows skipped because their idempotency receipt already existed.
+   */
+  duplicates?: number;
+
   event?: EventTriggerResponse.Event;
+
+  /**
+   * Historical event results. Present instead of event on the historical path.
+   */
+  events?: Array<EventTriggerResponse.Event>;
+
+  /**
+   * Present and true when occurredAt selected the historical import path.
+   */
+  historical?: boolean;
+
+  /**
+   * Historical event rows inserted by this request.
+   */
+  inserted?: number;
 
   /**
    * Present when this event created a brand-new subscriber while workspace double
@@ -86,6 +113,14 @@ export namespace EventTriggerResponse {
     definitionCreated?: boolean;
 
     name?: string;
+  }
+
+  export interface Event {
+    id?: string;
+
+    name?: string;
+
+    occurredAt?: string;
   }
 
   /**
@@ -131,6 +166,12 @@ export namespace EventTriggerMultipleResponse {
     id?: string;
 
     definitionCreated?: boolean;
+
+    /**
+     * Present and true when this event's eventId was already recorded for the contact
+     * and event name, so nothing was written and no side effects ran.
+     */
+    duplicate?: boolean;
 
     name?: string;
 
@@ -179,8 +220,11 @@ export interface EventTriggerParams {
   email?: string;
 
   /**
-   * Caller-owned event ID. Re-sending the same ID for a historical event writes
-   * nothing new, so an interrupted import is safe to re-run.
+   * Caller-owned event ID used as an idempotency key on both paths. A repeated live
+   * event returns the existing event with duplicate=true. A repeated historical
+   * event remains a historical response and increments duplicates instead.
+   * Best-effort for live events sent within about a second of each other, so a
+   * producer needing a strict guarantee should keep its own ledger.
    */
   eventId?: string;
 
@@ -246,7 +290,9 @@ export namespace EventTriggerMultipleParams {
     name: string;
 
     /**
-     * Caller-owned event ID that makes a re-run idempotent.
+     * Caller-owned event ID that makes a re-run idempotent on both the live and
+     * historical paths. On the live path a repeated ID is skipped and its response
+     * entry carries duplicate=true.
      */
     eventId?: string;
 
