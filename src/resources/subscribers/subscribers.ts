@@ -159,6 +159,12 @@ export interface Subscriber {
   tags?: Array<string>;
 
   /**
+   * IANA timezone identifier used for recipient-local campaign delivery. Null when
+   * unknown.
+   */
+  timezone?: string | null;
+
+  /**
    * When the contact opted out, derived from the list memberships the opt-out
    * deactivated. Use this rather than `updatedAt` to date an opt-out - any later tag
    * or attribute write moves `updatedAt`. Null unless the contact is currently
@@ -516,6 +522,13 @@ export interface SubscriberCreateParams {
   status?: 'active' | 'unsubscribed' | 'bounced';
 
   tags?: Array<string>;
+
+  /**
+   * IANA timezone identifier (e.g. America/New_York) used for recipient-local
+   * campaign delivery. Invalid values fail with a 400 validation error; null clears
+   * the stored value.
+   */
+  timezone?: string | null;
 }
 
 export interface SubscriberRetrieveParams {
