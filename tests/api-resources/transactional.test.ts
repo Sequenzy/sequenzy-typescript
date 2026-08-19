@@ -76,6 +76,7 @@ describe('resource transactional', () => {
       templateId: 'welcome-email',
       trackingSettings: { clickTracking: false, openTracking: true },
       variables: { NAME: 'bar' },
+      'Idempotency-Key': 'Idempotency-Key',
     });
   });
 });
