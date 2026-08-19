@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as TransactionalAPI from './transactional';
 import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -33,6 +34,10 @@ export class Transactional extends APIResource {
    * unsubscribe suppression, adds the standard marketing footer, and emits RFC 8058
    * one-click-unsubscribe headers. The caller remains responsible for having consent
    * or another lawful basis.
+   *
+   * For callers that may retry, send a stable `Idempotency-Key` header. The same key
+   * and request returns the original `emailSendId` for 14 days without another
+   * delivery. Reusing a key with different request content returns 409.
    *
    * You can either:
    *
@@ -93,8 +98,16 @@ export class Transactional extends APIResource {
    * });
    * ```
    */
-  send(body: TransactionalSendParams, options?: RequestOptions): APIPromise<TransactionalSendResponse> {
-    return this._client.post('/transactional/send', { body, ...options });
+  send(params: TransactionalSendParams, options?: RequestOptions): APIPromise<TransactionalSendResponse> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/transactional/send', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -178,6 +191,12 @@ export namespace TransactionalSendResponse {
      * Delivery policy accepted for the queued email.
      */
     emailType?: 'marketing' | 'transactional';
+
+    /**
+     * True when this response replays an earlier request with the same
+     * Idempotency-Key.
+     */
+    idempotentReplay?: boolean;
 
     /**
      * @deprecated Legacy queue identifier retained for response compatibility.
@@ -267,6 +286,12 @@ export namespace TransactionalSendResponse {
      * Delivery policy accepted for the queued email.
      */
     emailType?: 'marketing' | 'transactional';
+
+    /**
+     * True when this response replays an earlier request with the same
+     * Idempotency-Key.
+     */
+    idempotentReplay?: boolean;
 
     /**
      * @deprecated Legacy queue identifier retained for response compatibility.
@@ -361,13 +386,14 @@ export interface TransactionalListParams {
 
 export interface TransactionalSendParams {
   /**
-   * Recipient email address(es). Can be a single email string or an array of up to
-   * 50 emails.
+   * Body param: Recipient email address(es). Can be a single email string or an
+   * array of up to 50 emails.
    */
   to: string | Array<string>;
 
   /**
-   * File attachments for the email. Each attachment must have a filename and either:
+   * Body param: File attachments for the email. Each attachment must have a filename
+   * and either:
    *
    * - `content`: Base64-encoded file content
    * - `path`: URL to fetch the file from
@@ -380,96 +406,98 @@ export interface TransactionalSendParams {
   attachments?: Array<TransactionalSendParams.Attachment>;
 
   /**
-   * Blind-carbon-copy recipient email address(es). Duplicates already present in
-   * `to` or `cc` are removed.
+   * Body param: Blind-carbon-copy recipient email address(es). Duplicates already
+   * present in `to` or `cc` are removed.
    */
   bcc?: string | Array<string>;
 
   /**
-   * Canonical email body HTML content (required if not using a template slug).
+   * Body param: Canonical email body HTML content (required if not using a template
+   * slug).
    */
   body?: string;
 
   /**
-   * Visible carbon-copy recipient email address(es). Duplicates already present in
-   * `to` are removed.
+   * Body param: Visible carbon-copy recipient email address(es). Duplicates already
+   * present in `to` are removed.
    */
   cc?: string | Array<string>;
 
   /**
-   * Delivery policy. Marketing mode requires one recipient, creates or links a
-   * minimal subscriber, honors unsubscribe suppression, adds the standard footer,
-   * and emits RFC 8058 List-Unsubscribe and List-Unsubscribe-Post headers.
+   * Body param: Delivery policy. Marketing mode requires one recipient, creates or
+   * links a minimal subscriber, honors unsubscribe suppression, adds the standard
+   * footer, and emits RFC 8058 List-Unsubscribe and List-Unsubscribe-Post headers.
    */
   emailType?: 'transactional' | 'marketing';
 
   /**
-   * Custom from address. Format: "Name <email>" or just "email". The domain must be
-   * verified for your account. If not verified, this field is silently ignored.
+   * Body param: Custom from address. Format: "Name <email>" or just "email". The
+   * domain must be verified for your account. If not verified, this field is
+   * silently ignored.
    */
   from?: string;
 
   /**
-   * Compatibility alias for `body`. Accepted with `subject` for direct sends and
-   * must match `body` when both are provided.
+   * Body param: Compatibility alias for `body`. Accepted with `subject` for direct
+   * sends and must match `body` when both are provided.
    */
   html?: string;
 
   /**
-   * Preview text for the email (only used with direct content)
+   * Body param: Preview text for the email (only used with direct content)
    */
   preview?: string;
 
   /**
-   * Reply-to address. Format: "Name <email>" or just "email". Can be any valid email
-   * address. When reply tracking is disabled, this value is sent as the email's
-   * `Reply-To` header. When reply tracking is enabled, Sequenzy sends a unique
-   * trackable `Reply-To` header and stores this value as the forwarding destination
-   * for replies. When omitted, direct-content sends inherit the company default and
-   * saved-template sends prefer the template reply profile before the company
-   * default. Both fall back to the first company reply profile. The resolved
+   * Body param: Reply-to address. Format: "Name <email>" or just "email". Can be any
+   * valid email address. When reply tracking is disabled, this value is sent as the
+   * email's `Reply-To` header. When reply tracking is enabled, Sequenzy sends a
+   * unique trackable `Reply-To` header and stores this value as the forwarding
+   * destination for replies. When omitted, direct-content sends inherit the company
+   * default and saved-template sends prefer the template reply profile before the
+   * company default. Both fall back to the first company reply profile. The resolved
    * destination is retained whether or not reply tracking is enabled; it is sent
    * directly only when reply tracking is disabled.
    */
   replyTo?: string;
 
   /**
-   * Canonical slug of the transactional email template to use (mutually exclusive
-   * with direct content).
+   * Body param: Canonical slug of the transactional email template to use (mutually
+   * exclusive with direct content).
    */
   slug?: string;
 
   /**
-   * Email subject (required if not using slug)
+   * Body param: Email subject (required if not using slug)
    */
   subject?: string;
 
   /**
-   * Customer-owned subscriber ID for single-recipient sends. If it matches an
-   * existing subscriber, analytics and localization use that subscriber; the value
-   * is also stored on the send and emitted as external_id in outbound email webhooks
-   * even when no subscriber exists. Maximum length is 255 characters.
+   * Body param: Customer-owned subscriber ID for single-recipient sends. If it
+   * matches an existing subscriber, analytics and localization use that subscriber;
+   * the value is also stored on the send and emitted as external_id in outbound
+   * email webhooks even when no subscriber exists. Maximum length is 255 characters.
    */
   subscriberExternalId?: string;
 
   /**
-   * Compatibility alias for `slug`. Despite the field name, pass the saved
-   * transactional email API slug, not its database ID. Must match `slug` when both
-   * are provided.
+   * Body param: Compatibility alias for `slug`. Despite the field name, pass the
+   * saved transactional email API slug, not its database ID. Must match `slug` when
+   * both are provided.
    */
   templateId?: string;
 
   /**
-   * Per-send tracking opt-outs. Each field defaults to `true`, meaning your
-   * account's tracking settings apply; set a field to `false` to disable that
+   * Body param: Per-send tracking opt-outs. Each field defaults to `true`, meaning
+   * your account's tracking settings apply; set a field to `false` to disable that
    * tracking for this send only. These fields can only opt out; they cannot enable
    * tracking that is disabled for your account.
    */
   trackingSettings?: TransactionalSendParams.TrackingSettings;
 
   /**
-   * Variables for template replacement (works with both modes). Values can be
-   * scalars, nested objects, or arrays used by repeat blocks. For a single
+   * Body param: Variables for template replacement (works with both modes). Values
+   * can be scalars, nested objects, or arrays used by repeat blocks. For a single
    * recipient, stored subscriber first and last names fill missing name variables;
    * explicit request variables take precedence. Raw HTML templates can use simple
    * subscriber/custom-attribute conditionals such as
@@ -483,6 +511,13 @@ export interface TransactionalSendParams {
    * defaults render as empty strings and do not block sending.
    */
   variables?: { [key: string]: unknown };
+
+  /**
+   * Header param: Caller-owned key for one logical email. Reuse the same key and
+   * request on retries to receive the original send for 14 days. Reusing the key
+   * with different content returns 409.
+   */
+  'Idempotency-Key'?: string;
 }
 
 export namespace TransactionalSendParams {
