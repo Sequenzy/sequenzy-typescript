@@ -479,8 +479,10 @@ export interface SubscriberCreateParams {
   lastName?: string;
 
   /**
-   * List IDs to add subscriber to. If not provided, subscriber follows the workspace
-   * default lists setting. If empty array, subscriber is added to NO lists.
+   * List IDs to add subscriber to. If not provided, a subscriber this call creates
+   * follows the workspace default lists setting and an existing subscriber keeps the
+   * memberships they already have, so an attribute-only upsert never changes list
+   * membership. If empty array, subscriber is added to NO lists.
    */
   lists?: Array<string>;
 
