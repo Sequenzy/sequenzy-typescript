@@ -433,7 +433,11 @@ export interface TransactionalSendParams {
   /**
    * Body param: Custom from address. Format: "Name <email>" or just "email". The
    * domain must be verified for your account. If not verified, this field is
-   * silently ignored.
+   * silently ignored. When the address exactly matches an existing sender identity
+   * (the display name disambiguates if several identities share the address), that
+   * identity - including its sending route - is used for the send; otherwise the
+   * template or company-default identity is kept and this field only changes the
+   * visible From.
    */
   from?: string;
 
