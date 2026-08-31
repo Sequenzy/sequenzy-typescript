@@ -465,7 +465,8 @@ export interface SubscriberCreateParams {
 
   /**
    * Whether to enroll the subscriber in matching sequences. Defaults to true for API
-   * calls, or to false when createdAt is supplied.
+   * calls, or to false when createdAt is supplied. Explicitly passing true requires
+   * the automations:trigger scope and returns 403 when that scope is missing.
    */
   enrollInSequences?: boolean;
 
