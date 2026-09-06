@@ -39,6 +39,18 @@ export class Transactional extends APIResource {
    * and request returns the original `emailSendId` for 14 days without another
    * delivery. Reusing a key with different request content returns 409.
    *
+   * Repeated identical transactional content reaching many distinct recipients can
+   * trigger a junk/list-testing review. Sending continues while review is pending or
+   * unavailable. A substantiated verdict can reject later matching deliveries before
+   * sending; these become terminal `failed` sends with an `errorMessage` beginning
+   * `Transactional content rejected:`. Read GET /email-sends/{emailSendId} for the
+   * final outcome. Failed deliveries are not held or replayed automatically, and
+   * replaying the same Idempotency-Key returns the original acceptance response.
+   * Dashboard retries of rejected deliveries also fail without sending, even after
+   * the decision expires. Correct the content or contact support before deliberately
+   * submitting a new logical send. This check does not pause the company or ban the
+   * account.
+   *
    * You can either:
    *
    * - Provide a canonical `slug` (or compatibility alias `templateId`) to use a
