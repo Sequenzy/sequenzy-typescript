@@ -84,9 +84,9 @@ export class Transactional extends APIResource {
    * Optionally set `from` (domain must be verified) and `replyTo` addresses. When
    * reply tracking is enabled, Sequenzy uses a unique trackable `Reply-To` header
    * and treats the resolved reply destination as the forwarding destination for
-   * captured replies. When `replyTo` is omitted, direct-content sends inherit the
-   * company's default reply profile and saved-template sends prefer the template
-   * reply profile before the company default. Both fall back to the first company
+   * captured replies. Without a reply identity override, saved-template sends prefer
+   * the template reply profile. Otherwise sends prefer the effective sending
+   * domain's default reply profile, then the company default, then the first company
    * reply profile. The resolved destination is retained whether or not reply
    * tracking is enabled; it is sent as the Reply-To header only when reply tracking
    * is disabled. Variables can be passed to customize the email content. Nested
@@ -100,6 +100,11 @@ export class Transactional extends APIResource {
    * queueing, the successful response includes a non-blocking `diagnostics` warning
    * object. Missing values do not block queueing or sending; a required variable
    * that is not provided and has no default renders as an empty string.
+   *
+   * Select existing identities with senderProfileId or fromEmail (and optional
+   * fromName), and replyProfileId or replyTo (with optional replyToName). These
+   * inputs look up profiles rather than create them. Use emailType, not isMarketing,
+   * to choose delivery policy.
    *
    * @example
    * ```ts
@@ -187,6 +192,16 @@ export type TransactionalSendResponse =
 
 export namespace TransactionalSendResponse {
   export interface SlugBasedResponse {
+    /**
+     * Deduplicated BCC recipients; omitted when empty.
+     */
+    bcc?: Array<string>;
+
+    /**
+     * Deduplicated CC recipients; omitted when empty.
+     */
+    cc?: Array<string>;
+
     /**
      * Non-blocking warnings about template variable issues. The send is still queued
      * when this object is present, and missing values without defaults render as empty
@@ -282,6 +297,16 @@ export namespace TransactionalSendResponse {
   }
 
   export interface DirectContentResponse {
+    /**
+     * Deduplicated BCC recipients; omitted when empty.
+     */
+    bcc?: Array<string>;
+
+    /**
+     * Deduplicated CC recipients; omitted when empty.
+     */
+    cc?: Array<string>;
+
     /**
      * Non-blocking warnings about template variable issues. The send is still queued
      * when this object is present, and missing values without defaults render as empty
@@ -449,9 +474,23 @@ export interface TransactionalSendParams {
    * (the display name disambiguates if several identities share the address), that
    * identity - including its sending route - is used for the send; otherwise the
    * template or company-default identity is kept and this field only changes the
-   * visible From.
+   * visible From. Mutually exclusive with senderProfileId, fromEmail and fromName.
    */
   from?: string;
+
+  /**
+   * Body param: Address of an existing verified sender profile in this company.
+   * Mutually exclusive with senderProfileId and from. If several identities share
+   * the address, select one with fromName.
+   */
+  fromEmail?: string;
+
+  /**
+   * Body param: Display name selecting an existing identity on fromEmail. Requires
+   * fromEmail; mutually exclusive with senderProfileId and from. Does not create a
+   * profile.
+   */
+  fromName?: string;
 
   /**
    * Body param: Compatibility alias for `body`. Accepted with `subject` for direct
@@ -465,17 +504,34 @@ export interface TransactionalSendParams {
   preview?: string;
 
   /**
-   * Body param: Reply-to address. Format: "Name <email>" or just "email". Can be any
-   * valid email address. When reply tracking is disabled, this value is sent as the
-   * email's `Reply-To` header. When reply tracking is enabled, Sequenzy sends a
-   * unique trackable `Reply-To` header and stores this value as the forwarding
-   * destination for replies. When omitted, direct-content sends inherit the company
-   * default and saved-template sends prefer the template reply profile before the
-   * company default. Both fall back to the first company reply profile. The resolved
-   * destination is retained whether or not reply tracking is enabled; it is sent
-   * directly only when reply tracking is disabled.
+   * Body param: Existing reply profile ID. Mutually exclusive with replyTo and
+   * replyToName. Overrides the saved template and default reply identity.
+   */
+  replyProfileId?: string;
+
+  /**
+   * Body param: Reply-to address as "Name <email>" or a bare email, optionally
+   * paired with replyToName. Mutually exclusive with replyProfileId. With reply
+   * tracking enabled, Sequenzy sends a trackable Reply-To and stores this address as
+   * its forwarding destination. Without a reply override, saved-template sends
+   * prefer the template reply profile; otherwise sends prefer the effective
+   * sending-domain default, then company default, then the first company reply
+   * profile.
    */
   replyTo?: string;
+
+  /**
+   * Body param: Display name for a bare replyTo address. Requires replyTo and is
+   * mutually exclusive with replyProfileId. Does not create a profile.
+   */
+  replyToName?: string;
+
+  /**
+   * Body param: Existing verified sender profile ID. Mutually exclusive with
+   * fromEmail, fromName and from. Selects that identity and its sending route; does
+   * not create a profile.
+   */
+  senderProfileId?: string;
 
   /**
    * Body param: Canonical slug of the transactional email template to use (mutually
@@ -504,10 +560,10 @@ export interface TransactionalSendParams {
   templateId?: string;
 
   /**
-   * Body param: Per-send tracking opt-outs. Each field defaults to `true`, meaning
-   * your account's tracking settings apply; set a field to `false` to disable that
-   * tracking for this send only. These fields can only opt out; they cannot enable
-   * tracking that is disabled for your account.
+   * Body param: Per-send tracking opt-outs. Omitted fields follow the company
+   * Transactional API open/click defaults. Set false to disable tracking for this
+   * send. Neither true nor omission can enable tracking disabled by account-wide or
+   * Transactional API settings.
    */
   trackingSettings?: TransactionalSendParams.TrackingSettings;
 
@@ -570,10 +626,10 @@ export namespace TransactionalSendParams {
   }
 
   /**
-   * Per-send tracking opt-outs. Each field defaults to `true`, meaning your
-   * account's tracking settings apply; set a field to `false` to disable that
-   * tracking for this send only. These fields can only opt out; they cannot enable
-   * tracking that is disabled for your account.
+   * Per-send tracking opt-outs. Omitted fields follow the company Transactional API
+   * open/click defaults. Set false to disable tracking for this send. Neither true
+   * nor omission can enable tracking disabled by account-wide or Transactional API
+   * settings.
    */
   export interface TrackingSettings {
     /**

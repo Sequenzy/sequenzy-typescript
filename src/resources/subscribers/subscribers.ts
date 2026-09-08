@@ -150,6 +150,12 @@ export interface Subscriber {
   phone?: string | null;
 
   /**
+   * Two-letter ISO country code associated with the normalized phone number, or null
+   * when unavailable.
+   */
+  phoneCountry?: string | null;
+
+  /**
    * SMS marketing consent status, independent of the email status
    */
   smsStatus?: 'not_subscribed' | 'pending' | 'subscribed' | 'unsubscribed';
