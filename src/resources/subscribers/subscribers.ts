@@ -27,6 +27,10 @@ export class Subscribers extends APIResource {
    * Creates a new subscriber or handles existing ones based on the
    * `duplicateStrategy` parameter.
    *
+   * Requires `subscribers:write`, including when supplying a nonempty `lists` array.
+   * Explicit sequence enrollment and writes that can send a double opt-in
+   * confirmation require `automations:trigger`.
+   *
    * **Duplicate Strategies:**
    *
    * - `skip` (default): Don't update existing subscribers
@@ -489,10 +493,11 @@ export interface SubscriberCreateParams {
   lastName?: string;
 
   /**
-   * List IDs to add subscriber to. If not provided, a subscriber this call creates
-   * follows the workspace default lists setting and an existing subscriber keeps the
-   * memberships they already have, so an attribute-only upsert never changes list
-   * membership. If empty array, subscriber is added to NO lists.
+   * List IDs to add subscriber to, covered by subscribers:write. If not provided, a
+   * subscriber this call creates follows the workspace default lists setting and an
+   * existing subscriber keeps the memberships they already have, so an
+   * attribute-only upsert never changes list membership. If empty array, subscriber
+   * is added to NO lists.
    */
   lists?: Array<string>;
 
@@ -575,8 +580,20 @@ export interface SubscriberUpdateParams {
    */
   externalId?: string;
 
+  /**
+   * Maximum 255 Unicode characters. Excess trailing ASCII spaces are accepted as by
+   * PostgreSQL. Longer names return 400 before any changes; correct the name before
+   * retrying. Omit to keep unchanged, or send an empty string to clear; null is not
+   * accepted.
+   */
   firstName?: string;
 
+  /**
+   * Maximum 255 Unicode characters. Excess trailing ASCII spaces are accepted as by
+   * PostgreSQL. Longer names return 400 before any changes; correct the name before
+   * retrying. Omit to keep unchanged, or send an empty string to clear; null is not
+   * accepted.
+   */
   lastName?: string;
 
   /**
