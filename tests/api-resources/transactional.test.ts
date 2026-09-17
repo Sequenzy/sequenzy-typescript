@@ -27,6 +27,7 @@ describe('resource transactional', () => {
       client.transactional.list(
         {
           includeMachineEngagement: true,
+          label: ['string'],
           order: 'asc',
           search: 'search',
           sort: 'date',
