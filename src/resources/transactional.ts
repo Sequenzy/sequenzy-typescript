@@ -137,6 +137,11 @@ export interface TransactionalEmail {
 
   enabled?: boolean;
 
+  /**
+   * Assigned company label names. Empty when unlabelled.
+   */
+  labels?: Array<string>;
+
   name?: string;
 
   slug?: string;
@@ -398,6 +403,13 @@ export interface TransactionalListParams {
    * click metrics.
    */
   includeMachineEngagement?: boolean;
+
+  /**
+   * Filter by company label names, matching any. Repeat the parameter for multiple
+   * names; commas are literal characters. Combined with search and status. Unknown
+   * names match no templates.
+   */
+  label?: Array<string>;
 
   /**
    * Sort direction.
